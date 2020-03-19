@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".activities.Login">
+
+    <TextView
+        style="@style/Title"
+        android:text="@string/email"
+        android:layout_marginTop="20dp"/>
+    <EditText
+        style="@style/EditText"
+        android:id="@+id/etEmail"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        style="@style/Title"
+        android:text="@string/password" />
+    <EditText
+        style="@style/EditText"
+        android:id="@+id/etPassword"
+        android:inputType="textPassword"/>
+
+    <Button
+        style="@style/Button"
+        android:id="@+id/btLogin"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:text="@string/login"
+        android:onClick="login"/>
+
+    <TextView
+        style="@style/Title"
+        android:id="@+id/tvCadastrar"
+        android:text="@string/register"
+        android:textAlignment="center"
+        android:onClick="cadastrar"/>
+
+</LinearLayout>

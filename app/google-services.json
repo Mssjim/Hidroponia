@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "733710715774",
+    "firebase_url": "https://hidroponia-mssjim.firebaseio.com",
+    "project_id": "hidroponia-mssjim",
+    "storage_bucket": "hidroponia-mssjim.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733710715774:android:7b96392885f9543a36c12f",
+        "android_client_info": {
+          "package_name": "br.mssjim.hidroponia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "733710715774-hnqflf3lg412j88mh9gj68edbtg26m96.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoFekHufdKfFU-4hMwMD12smv2JVqiB2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "733710715774-hnqflf3lg412j88mh9gj68edbtg26m96.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

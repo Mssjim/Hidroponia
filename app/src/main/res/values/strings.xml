@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Hidroponia</string>
+    <string name="app_cadastrar">Cadastrar</string>
+    <string name="app_login">Login</string>
+    <string name="app_contatos">Contatos</string>
+    <string name="app_update">Atualização</string>
+
+    <string name="email">E-Mail</string>
+    <string name="password">Senha</string>
+    <string name="login">Login</string>
+    <string name="register">Não Possui uma Conta? Comece Agora!</string>
+
+    <string name="user">Usuário</string>
+    <string name="passwordConfirm">Confirme a Senha</string>
+    <string name="cb_termos">Aceito e concordo com os <font><b>Termos de Uso</b></font>.</string>
+    <string name="cadastrar">Criar Conta</string>
+    <string name="bt_image">Foto</string>
+
+    <string name="conversas">Conversas</string>
+    <string name="contatos">Contatos</string>
+
+    <string name="update">Atualizar</string>
+    <string name="logout">Sair</string>
+
+    <string name="send">Enviar</string>
+    <string name="et_msg">Digite a mensagem...</string>
+
+    <string name="checkUpdates">Buscando atualizações...</string>
+    <string name="newUpdate">Nova atualização encontrada!</string>
+    <string name="currentVersion">Versão Atual:</string>
+    <string name="lastVersion">Versão Disponível:</string>
+    <string name="updated">Não há novas atualizações!</string>
+</resources>
