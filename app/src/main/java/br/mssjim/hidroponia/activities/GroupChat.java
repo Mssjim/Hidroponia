@@ -1,0 +1,222 @@
+package br.mssjim.hidroponia.activities;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
+import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.Item;
+import com.xwray.groupie.ViewHolder;
+
+import java.util.List;
+
+import br.mssjim.hidroponia.Hidroponia;
+import br.mssjim.hidroponia.LastMessage;
+import br.mssjim.hidroponia.Message;
+import br.mssjim.hidroponia.R;
+import br.mssjim.hidroponia.User;
+
+public class GroupChat extends Activity {
+
+    private GroupAdapter adapter;
+    private EditText etMsg;
+    private User user;
+    private User userSend;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.w("AppLog", "Chat - onCreate");
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.act_chat);
+
+        user = getIntent().getExtras().getParcelable("user");
+        etMsg = findViewById(R.id.etMsg);
+        userSend = Hidroponia.getUser();
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle(user.getUsername());
+
+        adapter = new GroupAdapter();
+        RecyclerView rv = findViewById(R.id.rv);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setAdapter(adapter);
+
+        loadMessages();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.w("AppLog", "Chat - onResume");
+        super.onResume();
+
+        // TODO Atualizar mensagens
+    }
+
+    public void loadMessages() {
+        Log.i("AppLog", "Carregando mensagens...");
+        // TODO Carregamento de mensagens
+        int delay = 0;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() { // Handler pra não travar tudo
+                // TODO Se bugar: [if(userSend != null)]
+                FirebaseFirestore.getInstance().collection("/mensagens")
+                        .document(userSend.getUserId()).collection(user.getUserId())
+                        .orderBy("time", Query.Direction.ASCENDING)
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                List<DocumentChange> docs = queryDocumentSnapshots.getDocumentChanges();
+
+                                if(docs != null) {
+                                    for(DocumentChange doc : docs) {
+                                        // Lista apenas as alterações
+                                        if(doc.getType() == DocumentChange.Type.ADDED) {
+                                            Message message = doc.getDocument().toObject(Message.class);
+                                            adapter.add(new MessageItem(message));
+                                            // TODO Agrupar mensagens do mesmo usuário
+                                        }
+                                    }
+                                }
+                            }
+                        });
+            }
+        }, delay);
+        Log.i("AppLog", "Todas as mensagens foram carregadas!");
+    }
+
+    public void enviar(View view) {
+        if(etMsg.getText().toString().isEmpty()) {
+            Log.i("AppLog", "Campo de mensagem vazio!");
+            return;
+        }
+
+        String text = etMsg.getText().toString();
+        final String userSendId = userSend.getUserId();
+        String userId = user.getUserId();
+        long time = System.currentTimeMillis();
+        etMsg.setText(null);
+
+        final Message message = new Message(text, userId, userSendId, time);
+
+        Log.i("AppLog", "1/2 - Adicionando mensagem ao Firestore...");
+        FirebaseFirestore.getInstance().collection("/mensagens").document(userSendId)
+                .collection(userId).document(Long.toString(time)).set(message)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i("AppLog", "1/2 - Mensagem adicionada com sucesso!");
+
+                        LastMessage lastMessage = new LastMessage(user, message);
+                        Log.i("AppLog", "1/2 - Adicionando mensagem rápida ao Firestore...");
+                        FirebaseFirestore.getInstance().collection("/data")
+                                .document(userSend.getUserId()).collection("last-messages")
+                                .document(user.getUserId()).set(lastMessage)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.i("AppLog", "1/2 - Mensagem rápida adicionada com sucesso!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.i("AppLog", "1/2 - Erro: " + e.getLocalizedMessage());
+                                        // TODO Catch Block
+                                    }
+                                });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("AppLog", "1/2 - Erro: " + e.getLocalizedMessage());
+                // TODO Catch Block
+            }
+        });
+
+        Log.i("AppLog", "2/2 - Adicionando mensagem ao Firestore...");
+        FirebaseFirestore.getInstance().collection("/mensagens").document(userId)
+                .collection(userSendId).add(message)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.i("AppLog", "2/2 - Mensagem adicionada com sucesso!");
+
+                        LastMessage lastMessage = new LastMessage(userSend, message);
+                        Log.i("AppLog", "2/2 - Adicionando mensagem rápida ao Firestore...");
+                        FirebaseFirestore.getInstance().collection("/data")
+                                .document(user.getUserId()).collection("last-messages")
+                                .document(userSend.getUserId()).set(lastMessage)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.i("AppLog", "2/2 - Mensagem rápida adicionada com sucesso!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.i("AppLog", "2/2 - Erro: " + e.getLocalizedMessage());
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("AppLog", "2/2 - Erro: " + e.getLocalizedMessage());
+                        // TODO Catch Block
+                    }
+                });
+    }
+
+    private class MessageItem extends Item<ViewHolder> {
+
+        private final Message message;
+
+        private MessageItem(Message message) {
+            this.message = message;
+        }
+
+        @Override
+        public void bind(@NonNull ViewHolder viewHolder, int position) {
+            TextView tvMsg = viewHolder.itemView.findViewById(R.id.tvMsg);
+            ImageView ivImage = viewHolder.itemView.findViewById(R.id.ivImage);
+
+            // TODO Exibir horário nas mensagens
+
+            tvMsg.setText(message.getText());
+            if(message.getUserSendId().equals(userSend.getUserId())) {
+                Picasso.get().load(userSend.getProfileImage()).into(ivImage);
+            } else {
+                Picasso.get().load(user.getProfileImage()).into(ivImage);
+            }
+        }
+
+        @Override
+        public int getLayout() {
+            return message.getUserSendId().equals(userSend.getUserId())
+                    ? R.layout.item_message_send
+                    : R.layout.item_message;
+        }
+    }
+}
