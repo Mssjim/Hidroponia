@@ -52,7 +52,8 @@ public class Conversas extends Activity {
         tvMsgGroup = findViewById(R.id.tvMsgGroup);
 
         Picasso.get().load(Url.getGroupImage).into(ivImageGroup);
-        // TODO Carregar o Nome do Grupo dinamicamente
+        // TODO Carregar o nome do grupo dinamicamente
+        // TODO Obter ultima mensagem do grupo
 
         adapter = new GroupAdapter();
         rv = findViewById(R.id.rv);

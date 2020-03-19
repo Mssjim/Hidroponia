@@ -72,6 +72,7 @@ public class Contatos extends Activity {
         super.onResume();
 
         // TODO Recarregar contatos != Adicionar mais contatos
+        // TODO Ordernar contatos Alfabeticamente/Roles
         Log.i("AppLog", "Carregando lista de contatos...");
         FirebaseFirestore.getInstance().collection("/users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

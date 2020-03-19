@@ -28,6 +28,7 @@ import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.ViewHolder;
 
+import java.net.URL;
 import java.util.List;
 
 import br.mssjim.hidroponia.Hidroponia;
@@ -35,8 +36,11 @@ import br.mssjim.hidroponia.LastMessage;
 import br.mssjim.hidroponia.Message;
 import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.User;
+import br.mssjim.hidroponia.utils.Url;
 
 public class GroupChat extends Activity {
+
+    // TODO permitir outros grupos além do "Hidroponia"
 
     private GroupAdapter adapter;
     private EditText etMsg;
@@ -77,7 +81,8 @@ public class GroupChat extends Activity {
             @Override
             public void run() { // Handler pra não travar tudo
                 // TODO Se bugar: [if(userSend != null)]
-                FirebaseFirestore.getInstance().collection("/group-messages")
+                FirebaseFirestore.getInstance().collection("/groups").document("hidroponia")
+                        .collection("messages")
                         .orderBy("time", Query.Direction.ASCENDING)
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
@@ -109,35 +114,34 @@ public class GroupChat extends Activity {
 
         String text = etMsg.getText().toString();
         final String userSendId = userSend.getUserId();
-        String userId = user.getUserId();
         long time = System.currentTimeMillis();
         etMsg.setText(null);
 
-        final Message message = new Message(text, userId, userSendId, time);
+        final Message message = new Message(text, null, userSendId, time);
 
-        Log.i("AppLog", "1/2 - Adicionando mensagem ao Firestore...");
-        FirebaseFirestore.getInstance().collection("/mensagens").document(userSendId)
-                .collection(userId).document(Long.toString(time)).set(message)
+        Log.i("AppLog", "Adicionando mensagem ao Firestore...");
+        FirebaseFirestore.getInstance().collection("/groups").document("hidroponia")
+                .collection("messages").document(Long.toString(time)).set(message)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.i("AppLog", "1/2 - Mensagem adicionada com sucesso!");
+                        Log.i("AppLog", "Mensagem adicionada com sucesso!");
 
-                        LastMessage lastMessage = new LastMessage(user, message);
-                        Log.i("AppLog", "1/2 - Adicionando mensagem rápida ao Firestore...");
-                        FirebaseFirestore.getInstance().collection("/data")
-                                .document(userSend.getUserId()).collection("last-messages")
-                                .document(user.getUserId()).set(lastMessage)
+                        LastMessage lastMessage = new LastMessage(userSend, message);
+                        Log.i("AppLog", "Adicionando mensagem rápida ao Firestore...");
+                        FirebaseFirestore.getInstance().collection("/groups")
+                                .document("hidroponia").collection("data")
+                                .document("last-message").set(lastMessage)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Log.i("AppLog", "1/2 - Mensagem rápida adicionada com sucesso!");
+                                        Log.i("AppLog", "Mensagem rápida adicionada com sucesso!");
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Log.i("AppLog", "1/2 - Erro: " + e.getLocalizedMessage());
+                                        Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
                                         // TODO Catch Block
                                     }
                                 });
@@ -145,45 +149,10 @@ public class GroupChat extends Activity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.i("AppLog", "1/2 - Erro: " + e.getLocalizedMessage());
+                Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
                 // TODO Catch Block
             }
         });
-
-        Log.i("AppLog", "2/2 - Adicionando mensagem ao Firestore...");
-        FirebaseFirestore.getInstance().collection("/mensagens").document(userId)
-                .collection(userSendId).add(message)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.i("AppLog", "2/2 - Mensagem adicionada com sucesso!");
-
-                        LastMessage lastMessage = new LastMessage(userSend, message);
-                        Log.i("AppLog", "2/2 - Adicionando mensagem rápida ao Firestore...");
-                        FirebaseFirestore.getInstance().collection("/data")
-                                .document(user.getUserId()).collection("last-messages")
-                                .document(userSend.getUserId()).set(lastMessage)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.i("AppLog", "2/2 - Mensagem rápida adicionada com sucesso!");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.i("AppLog", "2/2 - Erro: " + e.getLocalizedMessage());
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i("AppLog", "2/2 - Erro: " + e.getLocalizedMessage());
-                        // TODO Catch Block
-                    }
-                });
     }
 
     private class MessageItem extends Item<ViewHolder> {
@@ -205,7 +174,8 @@ public class GroupChat extends Activity {
             if(message.getUserSendId().equals(userSend.getUserId())) {
                 Picasso.get().load(userSend.getProfileImage()).into(ivImage);
             } else {
-                Picasso.get().load(user.getProfileImage()).into(ivImage);
+                Picasso.get().load(Url.getGroupImage).into(ivImage);
+                // TODO Carregar imagem do usuário que enviou a mensagem
             }
         }
 
