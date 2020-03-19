@@ -30,11 +30,15 @@ import java.util.List;
 import br.mssjim.hidroponia.Hidroponia;
 import br.mssjim.hidroponia.LastMessage;
 import br.mssjim.hidroponia.R;
+import br.mssjim.hidroponia.utils.Url;
 
 public class Conversas extends Activity {
 
     private GroupAdapter adapter;
     private RecyclerView rv;
+
+    private ImageView ivImageGroup;
+    private TextView tvMsgGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,12 @@ public class Conversas extends Activity {
         setContentView(R.layout.act_conversas);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ivImageGroup = findViewById(R.id.ivImageGroup);
+        tvMsgGroup = findViewById(R.id.tvMsgGroup);
+
+        Picasso.get().load(Url.getGroupImage).into(ivImageGroup);
+        // TODO Carregar o Nome do Grupo dinamicamente
 
         adapter = new GroupAdapter();
         rv = findViewById(R.id.rv);

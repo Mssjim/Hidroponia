@@ -15,6 +15,7 @@
         android:onClick="groupChat">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivImageGroup"
             android:layout_width="48dp"
             android:layout_height="48dp"
             tools:src="@mipmap/ic_launcher_round"/>
