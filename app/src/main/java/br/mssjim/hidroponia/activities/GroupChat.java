@@ -40,7 +40,6 @@ public class GroupChat extends Activity {
 
     private GroupAdapter adapter;
     private EditText etMsg;
-    private User user;
     private User userSend;
 
     @Override
@@ -49,11 +48,10 @@ public class GroupChat extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_chat);
 
-        user = getIntent().getExtras().getParcelable("user");
         etMsg = findViewById(R.id.etMsg);
         userSend = Hidroponia.getUser();
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setTitle(user.getUsername());
+        getActionBar().setTitle(getResources().getString(R.string.app_name));
 
         adapter = new GroupAdapter();
         RecyclerView rv = findViewById(R.id.rv);
@@ -79,8 +77,7 @@ public class GroupChat extends Activity {
             @Override
             public void run() { // Handler pra não travar tudo
                 // TODO Se bugar: [if(userSend != null)]
-                FirebaseFirestore.getInstance().collection("/mensagens")
-                        .document(userSend.getUserId()).collection(user.getUserId())
+                FirebaseFirestore.getInstance().collection("/group-messages")
                         .orderBy("time", Query.Direction.ASCENDING)
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override

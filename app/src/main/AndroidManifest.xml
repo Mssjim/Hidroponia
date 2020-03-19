@@ -37,6 +37,9 @@
             android:name=".activities.Chat"
             android:parentActivityName=".activities.Inicio" />
         <activity
+            android:name=".activities.GroupChat"
+            android:parentActivityName=".activities.Inicio"/>
+        <activity
             android:name=".activities.Update"
             android:label="@string/app_update"
             android:parentActivityName=".activities.Inicio" />
