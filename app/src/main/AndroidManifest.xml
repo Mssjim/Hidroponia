@@ -32,7 +32,7 @@
         <activity
             android:name=".activities.Contatos"
             android:label="@string/app_contatos"
-            android:parentActivityName=".activities.Inicio" />
+            android:parentActivityName=".activities.Conversas" />
         <activity
             android:name=".activities.Chat"
             android:parentActivityName=".activities.Inicio" />

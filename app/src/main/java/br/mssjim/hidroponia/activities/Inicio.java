@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,9 +37,12 @@ public class Inicio extends Activity {
     private User user;
 
     private GroupAdapter adapter;
+    private Button btComercio;
     private TextView tvUsername;
     private ImageView ivImage;
     private RecyclerView rv;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +50,13 @@ public class Inicio extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_inicio);
 
+        btComercio = findViewById(R.id.btComercio);
         tvUsername = findViewById(R.id.tvUsername);
         ivImage = findViewById(R.id.ivImage);
         rv = findViewById(R.id.rv);
+
+        // TODO Definir 'btComercio' dinamicamente
+
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
@@ -124,7 +133,7 @@ public class Inicio extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.update:
                 Intent intent = new Intent(this, Update.class);
@@ -144,8 +153,7 @@ public class Inicio extends Activity {
         startActivity(intent);
     }
 
-    public void contatos(View view) {
-        Intent intent = new Intent(this, Contatos.class);
-        startActivity(intent);
+    public void comercio(View view) {
+        // TODO Ação ao pressionar botão
     }
 }

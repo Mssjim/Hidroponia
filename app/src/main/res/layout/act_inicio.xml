@@ -28,7 +28,7 @@
                 android:id="@+id/ivImage"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:src="@mipmap/ic_default_profile"
+                tools:src="@tools:sample/avatars"
                 app:civ_circle_background_color="@color/colorWhite"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -74,12 +74,13 @@
 
             <Button
                 style="@style/Button"
+                android:id="@+id/btComercio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:onClick="contatos"
-                android:text="@string/contatos" />
+                android:onClick="comercio"
+                tools:text="Horta / Negócio" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
