@@ -76,13 +76,9 @@ public class Hidroponia extends Application {
     }
 
     public static void setStatus(final String status) {
-        Map<String, Object> hashMap = new HashMap<>() ;
-        hashMap.put("status", status);
-        hashMap.put("lastSeen", System.currentTimeMillis());
-
         Log.i("AppLog", "Atualizando status do usuário...");
         FirebaseFirestore.getInstance().collection("/data").document(getUser().getUserId())
-                .collection("status").document("default").set(hashMap)
+                .collection("data").document("status").set(new Status(status, System.currentTimeMillis()))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

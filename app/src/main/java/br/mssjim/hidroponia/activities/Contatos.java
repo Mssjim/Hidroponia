@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import com.xwray.groupie.ViewHolder;
 import java.util.List;
 
 import br.mssjim.hidroponia.R;
+import br.mssjim.hidroponia.Status;
 import br.mssjim.hidroponia.User;
 
 public class Contatos extends Activity {
@@ -115,21 +117,27 @@ public class Contatos extends Activity {
             final TextView tvStatus = viewHolder.itemView.findViewById(R.id.tvStatus);
 
             tvUsername.setText(user.getUsername());
+            Picasso.get().load(user.getProfileImage()).into(ivImage);
             FirebaseFirestore.getInstance().collection("/data").document(user.getUserId())
-                    .collection("status").document("default")
+                    .collection("data").document("status")
                     .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         if(e != null) {
                             Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
                             // TODO Catch Block
+                            Toast.makeText(getApplicationContext(), "e != null", Toast.LENGTH_SHORT).show(); // TODO Toast Teste
                             return;
                         }
 
-                        tvStatus.setText(documentSnapshot.getString("status"));
-                }
+                        Status status = documentSnapshot.toObject(Status.class);
+
+                        if (status != null) {
+                            tvStatus.setText(status.getStatus());
+                            // TODO Exibir última vez visto
+                        }
+                    }
             });
-            Picasso.get().load(user.getProfileImage()).into(ivImage);
         }
 
         @Override

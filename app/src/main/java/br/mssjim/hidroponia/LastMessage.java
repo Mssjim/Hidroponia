@@ -1,6 +1,8 @@
 package br.mssjim.hidroponia;
 
 public class LastMessage {
+    // TODO Armazenar apenas o ID do usuário, não o objeto completo
+
     private User user;
     private Message message;
 

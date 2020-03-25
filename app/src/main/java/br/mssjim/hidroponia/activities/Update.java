@@ -25,7 +25,7 @@ import br.mssjim.hidroponia.R;
 
 public class Update extends Activity {
 
-    private final String currentVersion = "0.3.16";
+    private final String currentVersion = "0.3.23";
     private String lastVersion;
     private String changes;
     private Uri url;

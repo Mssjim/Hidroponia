@@ -79,8 +79,8 @@ public class Chat extends Activity {
             @Override
             public void run() { // Handler pra não travar tudo
                 // TODO Se bugar: [if(userSend != null)]
-                FirebaseFirestore.getInstance().collection("/mensagens")
-                        .document(userSend.getUserId()).collection(user.getUserId())
+                FirebaseFirestore.getInstance().collection("/data").document(userSend.getUserId())
+                        .collection("messages").document("all").collection(user.getUserId())
                         .orderBy("time", Query.Direction.ASCENDING)
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
@@ -119,7 +119,8 @@ public class Chat extends Activity {
         final Message message = new Message(text, userId, userSendId, time);
 
         Log.i("AppLog", "1/2 - Adicionando mensagem ao Firestore...");
-        FirebaseFirestore.getInstance().collection("/mensagens").document(userSendId)
+        FirebaseFirestore.getInstance().collection("/data").document(userSendId)
+                .collection("messages").document("all")
                 .collection(userId).document(Long.toString(time)).set(message)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -154,11 +155,12 @@ public class Chat extends Activity {
         });
 
         Log.i("AppLog", "2/2 - Adicionando mensagem ao Firestore...");
-        FirebaseFirestore.getInstance().collection("/mensagens").document(userId)
-                .collection(userSendId).add(message)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        FirebaseFirestore.getInstance().collection("/data").document(userId)
+                .collection("messages").document("all")
+                .collection(userSendId).document(Long.toString(time)).set(message)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void aVoid) {
                         Log.i("AppLog", "2/2 - Mensagem adicionada com sucesso!");
 
                         LastMessage lastMessage = new LastMessage(userSend, message);

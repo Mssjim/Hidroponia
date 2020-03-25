@@ -30,4 +30,13 @@
     <string name="currentVersion">Versão Atual:</string>
     <string name="lastVersion">Versão Disponível:</string>
     <string name="updated">Não há novas atualizações!</string>
+
+    <string name="role_staff">Staff</string>
+    <string name="role_cultivador">Cultivador</string>
+    <string name="role_comerciante">Comerciante</string>
+    <string name="role_hortifruti">Hortifruti</string>
+    <string name="role_default">Visitante</string>
+
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 </resources>

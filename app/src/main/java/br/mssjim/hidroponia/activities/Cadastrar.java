@@ -1,6 +1,8 @@
 package br.mssjim.hidroponia.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.User;
@@ -168,6 +171,26 @@ public class Cadastrar extends Activity {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
                                                         Log.i("AppLog", "Adicionado ao Firestore com sucesso!");
+                                                        // TODO Ações de usuário novo
+                                                        new AlertDialog.Builder(Cadastrar.this)
+                                                                .setTitle("")
+                                                                .setMessage("")
+                                                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                                        // TODO Positive Action
+                                                                    }
+                                                                })
+                                                                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                                        // TODO Negative Action
+                                                                    }
+                                                                })
+                                                                .setIcon(getDrawable(R.mipmap.ic_launcher_round))
+                                                                .show();
+
+                                                        // TODO Só Iniciar intent após sair do AlertDialog (se bugar)
                                                         Intent intent = new Intent(Cadastrar.this, Inicio.class);
                                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);

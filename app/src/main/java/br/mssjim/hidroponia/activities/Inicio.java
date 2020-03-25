@@ -1,6 +1,8 @@
 package br.mssjim.hidroponia.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+
+import java.util.Objects;
 
 import br.mssjim.hidroponia.Hidroponia;
 import br.mssjim.hidroponia.R;
@@ -71,6 +75,7 @@ public class Inicio extends Activity {
             System.exit(0); // TODO Arrumar isso pq ainda não entendi pq não bugou
             return;
         }
+
         FirebaseFirestore.getInstance().collection("/users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -102,6 +107,7 @@ public class Inicio extends Activity {
                 Log.i("AppLog", "Obtendo imagem de perfil...");
                 Picasso.get().load(user.getProfileImage()).into(ivImage);
                 Log.i("AppLog", "Imagem carregada com sucesso!");
+
                 loadCards();
             }
         });
