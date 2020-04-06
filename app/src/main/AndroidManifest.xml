@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.mssjim.hidroponia">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".Hidroponia"
@@ -28,7 +28,7 @@
         <activity
             android:name=".activities.Conversas"
             android:label="@string/conversas"
-            android:parentActivityName=".activities.Inicio"/>
+            android:parentActivityName=".activities.Inicio" />
         <activity
             android:name=".activities.Contatos"
             android:label="@string/app_contatos"
@@ -38,10 +38,18 @@
             android:parentActivityName=".activities.Inicio" />
         <activity
             android:name=".activities.GroupChat"
+            android:parentActivityName=".activities.Inicio" />
+        <activity
+            android:name=".activities.Join"
             android:parentActivityName=".activities.Inicio"/>
+        <activity
+            android:name=".activities.Termos"
+            android:label="@string/cb_termos2"/>
         <activity
             android:name=".activities.Update"
             android:label="@string/app_update"
             android:parentActivityName=".activities.Inicio" />
     </application>
+
+
 </manifest>

@@ -5,12 +5,17 @@
     <color name="colorStatusBar">#388E3C</color>
     <color name="colorAccent">#388E3C</color>
     <color name="colorSecondary">#1976D2</color>
+    <color name="colorSecondaryLight">#1E88E5</color>
     <color name="colorTitle">#388E3C</color>
     <color name="colorText">#000000</color>
     <color name="colorSubText">#424242</color>
+    <color name="colorTextLight">#606060</color>
     <color name="colorBackground">#F4F4F4</color>
     <color name="colorBackgroundDark">#DCDCE0</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorButton">#388E3C</color>
     <color name="colorButtonDisabled">#C8E6C9</color>
+
+    <color name="colorAlpha">#00000000</color>
+    <color name="colorDisabled">#a0000000</color>
 </resources>

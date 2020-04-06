@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.Join">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/joinTitle6"
+            android:gravity="center"/>
+
+        <EditText
+            style="@style/EditText"
+            android:id="@+id/etRazao"
+            android:inputType="text"
+            android:hint="@string/razao"/>
+
+        <EditText
+            style="@style/EditText"
+            android:id="@+id/etCnpj"
+            android:inputType="numberDecimal"
+            android:hint="@string/cnpj"/>
+
+        <EditText
+            style="@style/EditText"
+            android:id="@+id/etPhone"
+            android:inputType="phone"
+            android:hint="@string/phone"/>
+
+        <EditText
+            style="@style/EditText"
+            android:id="@+id/etAddress"
+            android:inputType="textPostalAddress"
+            android:hint="@string/address"/>
+
+        <EditText
+            style="@style/EditText"
+            android:id="@+id/etAddressNumber"
+            android:inputType="numberDecimal"
+            android:hint="@string/addressNumber"/>
+
+        <EditText
+            style="@style/EditText"
+            android:id="@+id/etCep"
+            android:inputType="numberDecimal"
+            android:hint="@string/cep"/>
+
+        <Button
+            style="@style/Button"
+            android:id="@+id/btCadastrar"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:text="@string/finish"
+            android:onClick="finishPJ"
+            android:background="@drawable/bg_button"/>
+    </LinearLayout>
+
+</ScrollView>

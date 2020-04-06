@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,8 @@ import java.util.Objects;
 
 import br.mssjim.hidroponia.Hidroponia;
 import br.mssjim.hidroponia.R;
+import br.mssjim.hidroponia.Roles;
+import br.mssjim.hidroponia.Status;
 import br.mssjim.hidroponia.User;
 
 public class Inicio extends Activity {
@@ -39,10 +42,11 @@ public class Inicio extends Activity {
     private GroupAdapter adapter;
     private Button btComercio;
     private TextView tvUsername;
+    private TextView tvRole;
     private ImageView ivImage;
     private RecyclerView rv;
 
-
+    private Roles roles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class Inicio extends Activity {
 
         btComercio = findViewById(R.id.btComercio);
         tvUsername = findViewById(R.id.tvUsername);
+        tvRole = findViewById(R.id.tvRole);
         ivImage = findViewById(R.id.ivImage);
         rv = findViewById(R.id.rv);
 
@@ -99,6 +104,7 @@ public class Inicio extends Activity {
                     return;
                 }
                 Hidroponia.setUser(documentSnapshot.toObject(User.class));
+                Hidroponia.setStatus("Online"); // TODO Refatorar status
                 user = Hidroponia.getUser();
 
                 // TODO Remover esse e arrumar o 'getUser' da Application
@@ -110,12 +116,40 @@ public class Inicio extends Activity {
                     return;
                 }
 
-                Log.i("AppLog", "Dados obtidos com sucesso!");
+                FirebaseFirestore.getInstance().collection("/data").document(user.getUserId())
+                        .collection("data").document("roles")
+                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                if(e != null) {
+                                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                                    // TODO Catch Block
+                                    Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                roles = documentSnapshot.toObject(Roles.class);
+
+                                tvRole.setText(roles.getRole());
+
+                                if (roles != null) {
+                                    if(roles.isOrganic() || roles.isStore()) {
+                                        btComercio.setText(getString(R.string.meuNegocio));
+                                    }
+                                    if(roles.isFarm() || roles.isSale()) {
+                                        btComercio.setText(getString(R.string.minhaHorta));
+                                    }
+                                } else {
+                                    if(!roles.isStaff())
+                                        btComercio.setText(getString(R.string.join));
+                                }
+                            }
+                        });
 
                 // TODO animação durante carregamento da imagem
-                Log.i("AppLog", "Obtendo imagem de perfil...");
                 Picasso.get().load(user.getProfileImage()).into(ivImage);
-                Log.i("AppLog", "Imagem carregada com sucesso!");
+
+                Log.i("AppLog", "Dados obtidos com sucesso!");
 
                 loadCards();
             }
@@ -141,7 +175,7 @@ public class Inicio extends Activity {
                 break;
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
-                Hidroponia.setStatus("Offline");
+                Hidroponia.setStatus("Offline"); // TODO Refatorar status
                 verifyLogin();
                 break;
         }
@@ -154,6 +188,18 @@ public class Inicio extends Activity {
     }
 
     public void comercio(View view) {
-        // TODO Ação ao pressionar botão
+        if (roles != null) {
+            if(roles.isOrganic() || roles.isStore()) {
+                // TODO Iniciar Activity 'MeuNegocio'
+            }
+            if(roles.isFarm() || roles.isSale()) {
+                // TODO Iniciar Activity 'MinhaHorta'
+            }
+        } else {
+            if(!roles.isStaff()) {
+                Intent intent = new Intent(Inicio.this, Join.class);
+                startActivity(intent);
+            }
+        }
     }
 }

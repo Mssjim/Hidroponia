@@ -12,7 +12,8 @@
 
     <string name="user">Usuário</string>
     <string name="passwordConfirm">Confirme a Senha</string>
-    <string name="cb_termos">Aceito e concordo com os <font><b>Termos de Uso</b></font>.</string>
+    <string name="cb_termos">Aceito e concordo com os</string>
+    <string name="cb_termos2">Termos de Uso</string>
     <string name="cadastrar">Criar Conta</string>
     <string name="bt_image">Foto</string>
 
@@ -31,12 +32,45 @@
     <string name="lastVersion">Versão Disponível:</string>
     <string name="updated">Não há novas atualizações!</string>
 
+    <!-- TODO Renomear Strings de Roles -->
     <string name="role_staff">Staff</string>
-    <string name="role_cultivador">Cultivador</string>
-    <string name="role_comerciante">Comerciante</string>
-    <string name="role_hortifruti">Hortifruti</string>
+    <string name="role_farm">Farm</string>
+    <string name="role_sale">Sale</string>
+    <string name="role_organic">Organic</string>
+    <string name="role_store">Store</string>
     <string name="role_default">Visitante</string>
 
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+    <string name="next">Continuar</string>
+    <string name="finish">Concluir</string>
+
+    <!-- TODO Refatorar Strings das telas de Joins -->
+    <string name="join">Iniciar!</string>
+    <string name="meuNegocio">Meu Negócio</string>
+    <string name="minhaHorta">Minha Horta</string>
+    <string name="joinTitle2">Qual o seu Perfil?</string>
+    <string name="joinTitle3">Qual finalidade?</string>
+    <string name="joinTitle4">Qual tipo de comércio?</string>
+    <string name="joinTitle5">Informe seus dados</string>
+    <string name="joinTitle6">Informe os dados do seu negócio</string>
+    <string name="choice">Escolha uma opção para prosseguir...</string>
+    <!-- TODO Strings Perfil Join -->
+    <string name="home">Blá blá blá Casa</string>
+    <string name="business">Blá blá blá Hortifruti</string>
+    <string name="farm">Blá blá blá Farm</string>
+    <string name="sale">Blá blá blá Sale</string>
+    <string name="organic">Blá blá blá Organic</string>
+    <string name="store">Blá blá blá Store</string>
+
+    <string name="fullName">Nome completo</string>
+    <string name="cpf">CPF</string>
+    <string name="phone">Telefone</string>
+    <string name="nasc">Data de nascimento</string>
+    <string name="address">Endereço</string>
+    <string name="addressNumber">Número</string>
+    <string name="cep">CEP</string>
+
+    <string name="razao">Razão Social</string>
+    <string name="cnpj">CNPJ</string>
 </resources>

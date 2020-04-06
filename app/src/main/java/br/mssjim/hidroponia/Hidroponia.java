@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,13 +16,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Hidroponia extends Application {
+public class Hidroponia extends Application implements Application.ActivityLifecycleCallbacks {
     private static User user;
+
+    private int i;
 
     @Override
     public void onCreate() {
         Log.e("AppLog", "Aplicação Iniciada");
-        registerActivityLifecycleCallbacks(new Lifecycle());
+        registerActivityLifecycleCallbacks(this); // TODO Talvez seja desnecessário
         super.onCreate();
     }
 
@@ -93,56 +96,51 @@ public class Hidroponia extends Application {
                     }
                 });
     }
-}
-
-class Lifecycle implements Application.ActivityLifecycleCallbacks {
-
-    private int i;
 
     @Override
-    public void onActivityCreated(Activity activity, Bundle bundle) {
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
 
     }
 
     @Override
-    public void onActivityStarted(Activity activity) {
+    public void onActivityStarted(@NonNull Activity activity) {
         if (i == 0) {
             Log.e("AppLog", "Aplicação em primeiro plano");
             if(Hidroponia.getUser() != null) {
-                Hidroponia.setStatus("Online");
+                Hidroponia.setStatus("Online"); // TODO Refatorar status
             }
         }
         i++;
     }
 
     @Override
-    public void onActivityResumed(Activity activity) {
+    public void onActivityResumed(@NonNull Activity activity) {
 
     }
 
     @Override
-    public void onActivityPaused(Activity activity) {
+    public void onActivityPaused(@NonNull Activity activity) {
 
     }
 
     @Override
-    public void onActivityStopped(Activity activity) {
+    public void onActivityStopped(@NonNull Activity activity) {
         i--;
         if (i == 0) {
             Log.e("AppLog", "Aplicação em segundo plano");
             if(Hidroponia.getUser() != null) {
-                Hidroponia.setStatus("Offline");
+                Hidroponia.setStatus("Offline"); // TODO Refatorar status
             }
         }
     }
 
     @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
 
     }
 
     @Override
-    public void onActivityDestroyed(Activity activity) {
+    public void onActivityDestroyed(@NonNull Activity activity) {
 
     }
 }

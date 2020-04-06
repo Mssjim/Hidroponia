@@ -57,20 +57,6 @@
             android:inputType="textPassword"
             android:hint="@string/passwordConfirm"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginBottom="20dp">
-            <CheckBox
-                android:id="@+id/cbTermos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cb_termos"
-                android:textColor="#606060"
-                android:onClick="termos"/>
-        </LinearLayout>
-
         <Button
             style="@style/Button"
             android:id="@+id/btCadastrar"
@@ -78,7 +64,6 @@
             android:layout_marginRight="80dp"
             android:text="@string/cadastrar"
             android:onClick="cadastrar"
-            android:clickable="false"
-            android:background="@drawable/bg_buttondisabled"/>
+            android:background="@drawable/bg_button"/>
     </LinearLayout>
 </ScrollView>

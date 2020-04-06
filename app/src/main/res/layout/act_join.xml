@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.Join">
+
+    <ImageView
+        android:id="@+id/waveTop"
+        android:src="@drawable/wave_1t"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleX="1.1"/>
+
+    <ImageView
+        android:id="@+id/waveBottom"
+        android:src="@drawable/wave_1b"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleX="1.1"
+        android:layout_alignParentBottom="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/waveTop"
+        android:layout_above="@id/waveBottom"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:src="@drawable/logo"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <CheckBox
+                android:id="@+id/cbTermos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cb_termos"
+                android:textSize="14sp"
+                android:textColor="@color/colorTextLight"
+                android:onClick="cbTermos"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cb_termos2"
+                android:textSize="14sp"
+                android:textColor="@color/colorSecondary"
+                android:textStyle="bold"
+                android:onClick="termos"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="."
+                android:textSize="14sp"
+                android:textColor="@color/colorTextLight"/>
+        </LinearLayout>
+
+        <Button
+            style="@style/Button"
+            android:id="@+id/btJoin"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/join"
+            android:onClick="join"
+            android:clickable="false"
+            android:background="@drawable/bg_buttondisabled"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

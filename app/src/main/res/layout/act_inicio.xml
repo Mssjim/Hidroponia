@@ -44,11 +44,11 @@
                     tools:text="Nome"/>
                 <TextView
                     style="@style/subText"
-                    android:id="@+id/tvStatus"
+                    android:id="@+id/tvRole"
                     android:layout_width="match_parent"
                     android:textSize="14sp"
                     android:layout_height="wrap_content"
-                    tools:text="Status"/>
+                    tools:text="Role"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -70,7 +70,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:onClick="conversas"
-                android:text="@string/conversas" />
+                android:text="@string/conversas"/>
 
             <Button
                 style="@style/Button"
@@ -80,7 +80,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:onClick="comercio"
-                tools:text="Horta / Negócio" />
+                tools:text="Horta / Negócio"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

@@ -126,7 +126,7 @@ public class Contatos extends Activity {
                         if(e != null) {
                             Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
                             // TODO Catch Block
-                            Toast.makeText(getApplicationContext(), "e != null", Toast.LENGTH_SHORT).show(); // TODO Toast Teste
+                            Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             return;
                         }
 

@@ -88,17 +88,6 @@ public class Cadastrar extends Activity {
         startActivityForResult(intent, 0);
     }
 
-    public void termos(View v) {
-        CheckBox cb = findViewById(v.getId());
-        if(cb.isChecked()) {
-            btCadastrar.setClickable(true);
-            btCadastrar.setBackground(getDrawable(R.drawable.bg_button));
-        } else {
-            btCadastrar.setClickable(false);
-            btCadastrar.setBackground(getDrawable(R.drawable.bg_buttondisabled));
-        }
-    }
-
     public void cadastrar(View v) {
         final String username = etUser.getText().toString();
         final String email = etEmail.getText().toString();
