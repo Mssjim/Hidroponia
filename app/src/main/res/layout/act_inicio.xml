@@ -46,8 +46,9 @@
                     style="@style/subText"
                     android:id="@+id/tvRole"
                     android:layout_width="match_parent"
-                    android:textSize="14sp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:textSize="14sp"
                     tools:text="Role"/>
             </LinearLayout>
         </LinearLayout>
