@@ -130,18 +130,18 @@ public class Inicio extends Activity {
 
                                 roles = documentSnapshot.toObject(Roles.class);
 
+                                if(roles == null) {
+                                    roles = new Roles();
+                                }
+
                                 tvRole.setText(roles.getRole());
 
-                                if (roles != null) {
-                                    if(roles.isOrganic() || roles.isStore()) {
-                                        btnComercio.setText(getString(R.string.meuNegocio));
-                                    }
-                                    if(roles.isFarm() || roles.isSale()) {
-                                        btnComercio.setText(getString(R.string.minhaHorta));
-                                    }
-                                    if(roles.isStaff()) {
-                                        btnComercio.setText(getString(R.string.panel));
-                                    }
+                                if(roles.isOrganic() || roles.isStore()) {
+                                    btnComercio.setText(getString(R.string.meuNegocio));
+                                } else if(roles.isFarm() || roles.isSale()) {
+                                    btnComercio.setText(getString(R.string.minhaHorta));
+                                } else if(roles.isStaff()) {
+                                    btnComercio.setText(getString(R.string.panel));
                                 } else {
                                     btnComercio.setText(getString(R.string.join));
                                 }
@@ -190,18 +190,15 @@ public class Inicio extends Activity {
     }
 
     public void comercio(View view) {
-        if (roles != null) {
-            if(roles.isOrganic() || roles.isStore()) {
-                // TODO Iniciar Activity 'MeuNegocio'
-            }
-            if(roles.isFarm() || roles.isSale()) {
-                // TODO Iniciar Activity 'MinhaHorta'
-            }
+        if(roles.isOrganic() || roles.isStore()) {
+            // TODO Iniciar Activity 'MeuNegocio'
+        } else if(roles.isFarm() || roles.isSale()) {
+            // TODO Iniciar Activity 'MinhaHorta'
+        } else if(roles.isStaff()) {
+            // TODO Iniciar Activity 'Panel'
         } else {
-            if(!roles.isStaff()) {
-                Intent intent = new Intent(Inicio.this, Join.class);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(Inicio.this, Join.class);
+            startActivity(intent);
         }
     }
 }

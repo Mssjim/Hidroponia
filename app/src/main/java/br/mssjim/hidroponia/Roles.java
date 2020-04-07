@@ -22,16 +22,16 @@ public class Roles {
 
     public String getRole() {
         if(staff)
-            return Resources.getSystem().getString(R.string.role_staff);
+            return Hidroponia.getContext().getString(R.string.role_staff);
         if(farm)
-            return Resources.getSystem().getString(R.string.role_farm);
+            return Hidroponia.getContext().getString(R.string.role_farm);
         if(sale)
-            return Resources.getSystem().getString(R.string.role_sale);
+            return Hidroponia.getContext().getString(R.string.role_sale);
         if(organic)
-            return Resources.getSystem().getString(R.string.role_organic);
+            return Hidroponia.getContext().getString(R.string.role_organic);
         if(store)
-            return Resources.getSystem().getString(R.string.role_store);
-        return Resources.getSystem().getString(R.string.role_default);
+            return Hidroponia.getContext().getString(R.string.role_store);
+        return Hidroponia.getContext().getString(R.string.role_default);
     }
 
     public boolean isFarm() {

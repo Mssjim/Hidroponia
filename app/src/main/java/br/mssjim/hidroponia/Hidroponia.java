@@ -3,6 +3,7 @@ package br.mssjim.hidroponia;
 import android.app.Activity;
 import android.app.Application;
 import android.content.ComponentCallbacks2;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Hidroponia extends Application implements Application.ActivityLifecycleCallbacks {
+    private static Context context;
     private static User user;
 
     private int i;
@@ -25,6 +27,7 @@ public class Hidroponia extends Application implements Application.ActivityLifec
     public void onCreate() {
         Log.e("AppLog", "Aplicação Iniciada");
         registerActivityLifecycleCallbacks(this); // TODO Talvez seja desnecessário
+        context = this;
         super.onCreate();
     }
 
@@ -67,6 +70,10 @@ public class Hidroponia extends Application implements Application.ActivityLifec
                 Log.e("AppLog", "onTrimMemory: Complete (80)");
                 break;
         }
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
     public static User getUser() {

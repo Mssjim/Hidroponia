@@ -81,7 +81,6 @@
         android:layout_alignParentRight="true"
         android:text="@string/next"
         android:onClick="join2"
-        android:clickable="false"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

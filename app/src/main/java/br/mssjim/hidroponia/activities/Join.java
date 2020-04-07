@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
@@ -209,7 +210,6 @@ public class Join extends Activity {
                 });
 
         updateRoles();
-        this.finish();
     }
 
     public void finishPJ(View view) {
@@ -252,7 +252,6 @@ public class Join extends Activity {
                 });
 
         updateRoles();
-        this.finish();
     }
 
     public void updateRoles() {
@@ -264,6 +263,10 @@ public class Join extends Activity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.i("AppLog", "Dados atualizados com sucesso!");
+
+                        Intent intent = new Intent(Join.this, Inicio.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
