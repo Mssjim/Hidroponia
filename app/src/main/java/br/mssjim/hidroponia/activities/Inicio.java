@@ -40,7 +40,7 @@ public class Inicio extends Activity {
     private User user;
 
     private GroupAdapter adapter;
-    private Button btComercio;
+    private Button btnComercio;
     private TextView tvUsername;
     private TextView tvRole;
     private ImageView ivImage;
@@ -54,7 +54,7 @@ public class Inicio extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_inicio);
 
-        btComercio = findViewById(R.id.btComercio);
+        btnComercio = findViewById(R.id.btnComercio);
         tvUsername = findViewById(R.id.tvUsername);
         tvRole = findViewById(R.id.tvRole);
         ivImage = findViewById(R.id.ivImage);
@@ -134,14 +134,16 @@ public class Inicio extends Activity {
 
                                 if (roles != null) {
                                     if(roles.isOrganic() || roles.isStore()) {
-                                        btComercio.setText(getString(R.string.meuNegocio));
+                                        btnComercio.setText(getString(R.string.meuNegocio));
                                     }
                                     if(roles.isFarm() || roles.isSale()) {
-                                        btComercio.setText(getString(R.string.minhaHorta));
+                                        btnComercio.setText(getString(R.string.minhaHorta));
+                                    }
+                                    if(roles.isStaff()) {
+                                        btnComercio.setText(getString(R.string.panel));
                                     }
                                 } else {
-                                    if(!roles.isStaff())
-                                        btComercio.setText(getString(R.string.join));
+                                    btnComercio.setText(getString(R.string.join));
                                 }
                             }
                         });
