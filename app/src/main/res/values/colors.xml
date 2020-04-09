@@ -13,9 +13,7 @@
     <color name="colorBackground">#F4F4F4</color>
     <color name="colorBackgroundDark">#DCDCE0</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhiteDark">#E0E0E0</color>
     <color name="colorButton">#388E3C</color>
     <color name="colorButtonDisabled">#C8E6C9</color>
-
-    <color name="colorAlpha">#00000000</color>
-    <color name="colorDisabled">#a0000000</color>
 </resources>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -110,6 +111,8 @@ public class Inicio extends Activity {
                 // TODO Remover esse e arrumar o 'getUser' da Application
                 try {
                     tvUsername.setText(user.getUsername());
+                    // TODO Melhorar sombra no campo de texto (talvez)
+                    tvUsername.setShadowLayer(16, 0, 0, Color.BLACK);
                 } catch (Exception err) {
                     Log.i("AppLog", "Erro: " + err.getLocalizedMessage());
                     // TODO Catch Block
@@ -135,6 +138,8 @@ public class Inicio extends Activity {
                                 }
 
                                 tvRole.setText(roles.getRole());
+                                // TODO Melhorar sombra no campo de texto (talvez)
+                                tvRole.setShadowLayer(4, 0, 0, Color.BLACK);
 
                                 if(roles.isOrganic() || roles.isStore()) {
                                     btnComercio.setText(getString(R.string.meuNegocio));
