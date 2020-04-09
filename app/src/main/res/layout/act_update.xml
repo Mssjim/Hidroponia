@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        tools:visibility="gone">
 
         <ProgressBar
             android:id="@+id/pb"
