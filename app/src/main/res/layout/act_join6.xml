@@ -45,12 +45,6 @@
 
         <EditText
             style="@style/EditText"
-            android:id="@+id/etAddressNumber"
-            android:inputType="numberDecimal"
-            android:hint="@string/addressNumber"/>
-
-        <EditText
-            style="@style/EditText"
             android:id="@+id/etCep"
             android:inputType="numberDecimal"
             android:hint="@string/cep"/>

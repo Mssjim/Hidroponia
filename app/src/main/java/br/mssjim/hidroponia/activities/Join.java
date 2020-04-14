@@ -176,7 +176,6 @@ public class Join extends Activity {
         EditText etCpf = findViewById(R.id.etCpf);
         EditText etPhone = findViewById(R.id.etPhone);
         EditText etAddress = findViewById(R.id.etAddress);
-        EditText etAddressNumber = findViewById(R.id.etAddressNumber);
         EditText etCep = findViewById(R.id.etCep);
 
         // TODO Evitar erros de Parse
@@ -187,7 +186,6 @@ public class Join extends Activity {
                 Integer.parseInt(etCpf.getText().toString()),
                 Integer.parseInt(etPhone.getText().toString()),
                 etAddress.getText().toString(),
-                Integer.parseInt(etAddressNumber.getText().toString()),
                 Integer.parseInt(etCep.getText().toString())
         );
 
@@ -219,7 +217,6 @@ public class Join extends Activity {
         EditText etCnpj = findViewById(R.id.etCnpj);
         EditText etPhone = findViewById(R.id.etPhone);
         EditText etAddress = findViewById(R.id.etAddress);
-        EditText etAddressNumber = findViewById(R.id.etAddressNumber);
         EditText etCep = findViewById(R.id.etCep);
 
         // TODO Evitar erros de Parse
@@ -229,7 +226,6 @@ public class Join extends Activity {
                 Integer.parseInt(etCnpj.getText().toString()),
                 Integer.parseInt(etPhone.getText().toString()),
                 etAddress.getText().toString(),
-                Integer.parseInt(etAddressNumber.getText().toString()),
                 Integer.parseInt(etCep.getText().toString())
         );
 
