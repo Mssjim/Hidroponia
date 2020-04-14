@@ -69,10 +69,88 @@
             android:onClick="changeImage"/>
 
         <LinearLayout
+            android:id="@+id/llDados"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:orientation="vertical"
-            />
+            android:layout_below="@id/llUser">
+            <TextView
+                style="@style/text"
+                android:id="@+id/tvNameField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:text="@string/fullName"/>
+            <TextView
+                style="@style/subText"
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@tools:sample/full_names"/>
+            <TextView
+                style="@style/text"
+                android:id="@+id/tvDataField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:text="@string/nasc"/>
+            <TextView
+                style="@style/subText"
+                android:id="@+id/tvData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@tools:sample/date/ddmmyy"/>
+            <TextView
+                style="@style/text"
+                android:id="@+id/tvCpfField"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:text="@string/cpf"/>
+            <TextView
+                style="@style/subText"
+                android:id="@+id/tvCpf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="000.000.000-00"/>
+            <TextView
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:text="@string/phone"/>
+            <TextView
+                style="@style/subText"
+                android:id="@+id/tvPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@tools:sample/us_phones"/>
+            <TextView
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:text="@string/address"/>
+            <TextView
+                style="@style/subText"
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@tools:sample/cities"/>
+            <TextView
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:text="@string/cep"/>
+            <TextView
+                style="@style/subText"
+                android:id="@+id/tvCep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@tools:sample/us_zipcodes"/>
+        </LinearLayout>
     </RelativeLayout>
 
 </ScrollView>

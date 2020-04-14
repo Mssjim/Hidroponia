@@ -38,9 +38,9 @@ import br.mssjim.hidroponia.Status;
 import br.mssjim.hidroponia.User;
 
 public class Inicio extends Activity {
-
     private User user;
     private Roles roles;
+    private Dados dados;
 
     private GroupAdapter adapter;
     private Button btnComercio;
@@ -166,7 +166,13 @@ public class Inicio extends Activity {
                                                     Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                                     return;
                                                 }
-                                                Hidroponia.setDados(documentSnapshot.toObject(Dados.class));
+
+                                                dados = documentSnapshot.toObject(Dados.class);
+
+                                                if(dados == null) {
+                                                    dados = new Dados();
+                                                }
+                                                Hidroponia.setDados(dados);
 
                                                 Log.i("AppLog", "Dados obtidos com sucesso!");
 

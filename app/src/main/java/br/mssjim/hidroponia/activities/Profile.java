@@ -46,6 +46,17 @@ public class Profile extends Activity {
     private TextView tvUsername;
     private TextView tvRole;
 
+    private LinearLayout llDados;
+    private TextView tvNameField;
+    private TextView tvName;
+    private TextView tvDataField;
+    private TextView tvData;
+    private TextView tvCpfField;
+    private TextView tvCpf;
+    private TextView tvPhone;
+    private TextView tvAddress;
+    private TextView tvCep;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +75,36 @@ public class Profile extends Activity {
         tvUsername.setText(user.getUsername());
         tvRole.setText(roles.getRole());
         Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
+
+        // Dados
+        llDados = findViewById(R.id.llDados);
+        tvNameField = findViewById(R.id.tvNameField);
+        tvName = findViewById(R.id.tvName);
+        tvDataField = findViewById(R.id.tvDataField);
+        tvData = findViewById(R.id.tvData);
+        tvCpfField = findViewById(R.id.tvCpfField);
+        tvCpf = findViewById(R.id.tvCpf);
+        tvPhone = findViewById(R.id.tvPhone);
+        tvAddress = findViewById(R.id.tvAddress);
+        tvCep = findViewById(R.id.tvCep);
+
+        if(roles.isOrganic() || roles.isStore()) {
+            tvDataField.setVisibility(View.GONE);
+            tvData.setVisibility(View.GONE);
+            tvNameField.setText(getString(R.string.razao));
+            tvCpfField.setText(getString(R.string.cnpj));
+        } else if (roles.isFarm() || roles.isSale()) {
+
+        } else {
+            llDados.setVisibility(View.GONE);
+        }
+
+        tvName.setText(dados.getName());
+        tvData.setText(dados.getDate());
+        tvCpf.setText(dados.getCpf());
+        tvPhone.setText(dados.getPhone());
+        tvAddress.setText(dados.getAddress());
+        tvCep.setText(dados.getCep());
     }
 
     @Override
@@ -127,6 +168,7 @@ public class Profile extends Activity {
                         if(TextUtils.isEmpty(s)) {
                             input.setError(getString(R.string.emptyField));
                         } else {
+                            tvUsername.setText(s);
                             FirebaseFirestore.getInstance().collection("users").
                                     document(user.getUserId()).update("username", s);
                         }
