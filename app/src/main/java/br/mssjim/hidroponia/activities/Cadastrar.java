@@ -150,7 +150,7 @@ public class Cadastrar extends Activity {
                                     public void onSuccess(Uri uri) {
                                         Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
                                         String id = FirebaseAuth.getInstance().getUid();
-                                        User user = new User(id, username, Hash.code(password), uri.toString());
+                                        User user = new User(id, username, email, Hash.code(password), uri.toString());
 
                                         Log.i("AppLog", "Adicionando usuário ao Firestore...");
 
