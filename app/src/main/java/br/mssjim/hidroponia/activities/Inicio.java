@@ -51,7 +51,6 @@ public class Inicio extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.w("AppLog", "Inicio - onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_inicio);
 
@@ -72,7 +71,6 @@ public class Inicio extends Activity {
 
     @Override
     protected void onResume() {
-        Log.w("AppLog", "Inicio - onResume");
         super.onResume();
         // TODO Atualizar cards
     }

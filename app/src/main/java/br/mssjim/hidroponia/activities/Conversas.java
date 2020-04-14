@@ -45,7 +45,6 @@ public class Conversas extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.w("AppLog", "Conversas - onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_conversas);
 
@@ -68,7 +67,6 @@ public class Conversas extends Activity {
 
     @Override
     protected void onResume() {
-        Log.w("AppLog", "Conversas - onResume");
         super.onResume();
         // TODO Atualizar conversas
     }

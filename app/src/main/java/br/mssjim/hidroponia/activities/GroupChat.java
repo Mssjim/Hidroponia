@@ -48,7 +48,6 @@ public class GroupChat extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.w("AppLog", "Chat - onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_chat);
 
@@ -67,7 +66,6 @@ public class GroupChat extends Activity {
 
     @Override
     protected void onResume() {
-        Log.w("AppLog", "Chat - onResume");
         super.onResume();
 
         // TODO Atualizar mensagens

@@ -42,7 +42,6 @@ public class Contatos extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.w("AppLog", "Contatos - onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_contatos);
 
@@ -70,7 +69,6 @@ public class Contatos extends Activity {
 
     @Override
     protected void onResume() {
-        Log.w("AppLog", "Contatos - onResume");
         super.onResume();
 
         // TODO Recarregar contatos != Adicionar mais contatos

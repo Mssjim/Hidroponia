@@ -51,7 +51,6 @@ public class Cadastrar extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.w("AppLog", "Cadastrar - onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_cadastrar);
 
@@ -66,7 +65,6 @@ public class Cadastrar extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.w("AppLog", "Cadastrar - onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 0) {
             imageUri = data.getData();

@@ -39,7 +39,6 @@ public class Update extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.w("AppLog", "Update - onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_update);
 
@@ -55,7 +54,6 @@ public class Update extends Activity {
 
     @Override
     protected void onResume() {
-        Log.w("AppLog", "Update - onResume");
         super.onResume();
         checkUpdates();
     }
