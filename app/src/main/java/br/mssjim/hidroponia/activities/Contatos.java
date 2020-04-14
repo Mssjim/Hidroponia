@@ -117,7 +117,7 @@ public class Contatos extends Activity {
             final TextView tvStatus = viewHolder.itemView.findViewById(R.id.tvStatus);
 
             tvUsername.setText(user.getUsername());
-            Picasso.get().load(user.getProfileImage()).into(ivImage);
+            Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
             FirebaseFirestore.getInstance().collection("/data").document(user.getUserId())
                     .collection("data").document("status")
                     .addSnapshotListener(new EventListener<DocumentSnapshot>() {

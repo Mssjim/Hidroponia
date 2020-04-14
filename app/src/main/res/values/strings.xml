@@ -42,8 +42,11 @@
 
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+    <string name="cancel">Cancelar</string>
     <string name="next">Continuar</string>
     <string name="finish">Concluir</string>
+
+    <string name="emptyField">Campo vazio!</string>
 
     <!-- TODO Refatorar Strings das telas de Joins -->
     <string name="join">Iniciar!</string>

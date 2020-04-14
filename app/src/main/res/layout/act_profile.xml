@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.Inicio">
+    tools:context=".activities.Profile">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,13 +29,12 @@
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 app:civ_circle_background_color="@color/colorWhite"
-                android:onClick="profile"
+                android:onClick="changeImage"
                 tools:src="@tools:sample/avatars"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:orientation="vertical"
-                android:onClick="profile">
+                android:orientation="vertical">
                 <TextView
                     style="@style/Title"
                     android:id="@+id/tvUsername"
@@ -44,7 +43,9 @@
                     android:paddingLeft="10dp"
                     android:textSize="25sp"
                     android:textColor="@color/colorWhite"
-                    tools:text="Nome"/>
+                    android:drawableEnd="@drawable/ic_edit"
+                    tools:text="Nome"
+                    android:onClick="changeUsername"/>
                 <TextView
                     style="@style/subText"
                     android:id="@+id/tvRole"
@@ -58,42 +59,20 @@
             </LinearLayout>
         </LinearLayout>
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_edit"
+            android:layout_marginTop="104dp"
+            android:layout_marginLeft="84dp"
+            app:civ_circle_background_color="@color/colorPrimary"
+            android:onClick="changeImage"/>
+
         <LinearLayout
-            android:id="@+id/llActions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_below="@id/llUser"
-            android:orientation="horizontal">
-
-            <Button
-                style="@style/Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:onClick="conversas"
-                android:text="@string/conversas"/>
-
-            <Button
-                style="@style/Button"
-                android:id="@+id/btnComercio"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:onClick="comercio"
-                tools:text="Horta / Negócio"/>
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/llActions"
-            tools:listitem="@layout/item_card"/>
+            android:orientation="vertical"
+            />
     </RelativeLayout>
+
 </ScrollView>

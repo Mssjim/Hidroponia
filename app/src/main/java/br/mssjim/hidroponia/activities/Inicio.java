@@ -30,6 +30,7 @@ import com.xwray.groupie.GroupAdapter;
 
 import java.util.Objects;
 
+import br.mssjim.hidroponia.Dados;
 import br.mssjim.hidroponia.Hidroponia;
 import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.Roles;
@@ -39,6 +40,7 @@ import br.mssjim.hidroponia.User;
 public class Inicio extends Activity {
 
     private User user;
+    private Roles roles;
 
     private GroupAdapter adapter;
     private Button btnComercio;
@@ -46,8 +48,6 @@ public class Inicio extends Activity {
     private TextView tvRole;
     private ImageView ivImage;
     private RecyclerView rv;
-
-    private Roles roles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +118,8 @@ public class Inicio extends Activity {
                     // TODO Catch Block
                     return;
                 }
+                // TODO Exibir uma imagem padrão ou animação de carregamento
+                Picasso.get().load(user.getProfileImage()).into(ivImage);
 
                 FirebaseFirestore.getInstance().collection("/data").document(user.getUserId())
                         .collection("data").document("roles")
@@ -137,10 +139,13 @@ public class Inicio extends Activity {
                                     roles = new Roles();
                                 }
 
+                                Hidroponia.setRoles(roles);
+
                                 tvRole.setText(roles.getRole());
                                 // TODO Melhorar sombra no campo de texto (talvez)
                                 tvRole.setShadowLayer(4, 0, 0, Color.BLACK);
 
+                                // TODO Só exibir aqui 'btnComercio'
                                 if(roles.isOrganic() || roles.isStore()) {
                                     btnComercio.setText(getString(R.string.meuNegocio));
                                 } else if(roles.isFarm() || roles.isSale()) {
@@ -150,15 +155,28 @@ public class Inicio extends Activity {
                                 } else {
                                     btnComercio.setText(getString(R.string.join));
                                 }
+
+                                FirebaseFirestore.getInstance().collection("/data")
+                                        .document(user.getUserId()).collection("data")
+                                        .document("dados")
+                                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                                if(e != null) {
+                                                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                                                    // TODO Catch Block
+                                                    Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                                    return;
+                                                }
+                                                Hidroponia.setDados(documentSnapshot.toObject(Dados.class));
+
+                                                Log.i("AppLog", "Dados obtidos com sucesso!");
+
+                                                loadCards();
+                                            }
+                                        });
                             }
                         });
-
-                // TODO animação durante carregamento da imagem
-                Picasso.get().load(user.getProfileImage()).into(ivImage);
-
-                Log.i("AppLog", "Dados obtidos com sucesso!");
-
-                loadCards();
             }
         });
     }
@@ -187,6 +205,11 @@ public class Inicio extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void profile(View view) {
+        Intent intent = new Intent(Inicio.this, Profile.class);
+        startActivity(intent);
     }
 
     public void conversas(View view) {

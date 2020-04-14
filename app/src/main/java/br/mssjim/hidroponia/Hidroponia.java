@@ -20,6 +20,8 @@ import java.util.Map;
 public class Hidroponia extends Application implements Application.ActivityLifecycleCallbacks {
     private static Context context;
     private static User user;
+    private static Roles roles;
+    private static Dados dados;
 
     private int i;
 
@@ -81,8 +83,26 @@ public class Hidroponia extends Application implements Application.ActivityLifec
         return user;
     }
 
+    public static Roles getRoles() {
+        // TODO Evitar Null Exceptions
+        return roles;
+    }
+
+    public static Dados getDados() {
+        // TODO Evitar Null Exceptions
+        return dados;
+    }
+
     public static void setUser(User user) {
         Hidroponia.user = user;
+    }
+
+    public static void setRoles(Roles roles) {
+        Hidroponia.roles = roles;
+    }
+
+    public static void setDados(Dados dados) {
+        Hidroponia.dados = dados;
     }
 
     public static void setStatus(final String status) {

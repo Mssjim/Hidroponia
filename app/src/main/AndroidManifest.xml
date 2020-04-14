@@ -21,24 +21,28 @@
         </activity>
         <activity
             android:name=".activities.Cadastrar"
-            android:label="@string/app_cadastrar" />
+            android:label="@string/app_cadastrar"/>
         <activity
             android:name=".activities.Login"
-            android:label="@string/app_login" />
+            android:label="@string/app_login"/>
         <activity
             android:name=".activities.Conversas"
             android:label="@string/conversas"
-            android:parentActivityName=".activities.Inicio" />
+            android:parentActivityName=".activities.Inicio"/>
         <activity
             android:name=".activities.Contatos"
             android:label="@string/app_contatos"
-            android:parentActivityName=".activities.Conversas" />
+            android:parentActivityName=".activities.Conversas"/>
         <activity
             android:name=".activities.Chat"
             android:parentActivityName=".activities.Inicio" />
         <activity
             android:name=".activities.GroupChat"
             android:parentActivityName=".activities.Inicio" />
+        <activity
+            android:name=".activities.Profile"
+            android:label="Perfil"
+            android:parentActivityName=".activities.Inicio"/>
         <activity
             android:name=".activities.Join"
             android:parentActivityName=".activities.Inicio"/>
@@ -48,7 +52,7 @@
         <activity
             android:name=".activities.Update"
             android:label="@string/app_update"
-            android:parentActivityName=".activities.Inicio" />
+            android:parentActivityName=".activities.Inicio"/>
     </application>
 
 
