@@ -44,6 +44,8 @@
                     android:paddingLeft="10dp"
                     android:textSize="25sp"
                     android:textColor="@color/colorWhite"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     tools:text="Nome"/>
                 <TextView
                     style="@style/subText"
