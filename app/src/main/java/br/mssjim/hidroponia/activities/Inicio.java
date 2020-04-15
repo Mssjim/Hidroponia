@@ -110,7 +110,7 @@ public class Inicio extends Activity {
                 try {
                     tvUsername.setText(user.getUsername());
                     // TODO Melhorar sombra no campo de texto (talvez)
-                    tvUsername.setShadowLayer(16, 0, 0, Color.BLACK);
+                    tvUsername.setShadowLayer(10, 0, 0, Color.BLACK);
                 } catch (Exception err) {
                     Log.i("AppLog", "Erro: " + err.getLocalizedMessage());
                     // TODO Catch Block
