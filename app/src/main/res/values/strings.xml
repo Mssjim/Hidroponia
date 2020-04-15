@@ -78,5 +78,10 @@
     <string name="razao">Razão Social</string>
     <string name="cnpj">CNPJ</string>
 
+    <string name="dados">Dados</string>
     <string name="changeUsername">Alterar nome de usuário</string>
+    <string name="changePassword">Alterar Senha</string>
+    <string name="changeDados">Alterar Dados</string>
+    <string name="deleteAccount">Excluir Conta</string>
+    <string name="deleteAccountConfirm">Tem certeza que deseja excluir a conta?\nEssa ação é irreversível!</string>
 </resources>

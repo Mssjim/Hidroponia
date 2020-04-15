@@ -11,8 +11,10 @@
     <color name="colorTextLight">#606060</color>
     <color name="colorBackground">#F4F4F4</color>
     <color name="colorBackgroundDark">#DCDCE0</color>
+    <color name="colorBackgroundDarker">#CCCCD0</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhiteDark">#E0E0E0</color>
     <color name="colorButton">#388E3C</color>
     <color name="colorButtonDisabled">#C8E6C9</color>
+    <color name="colorError">#C62828</color>
 </resources>

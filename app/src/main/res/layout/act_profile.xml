@@ -81,7 +81,6 @@
                 style="@style/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:text="@string/email"/>
             <TextView
                 style="@style/subText"
@@ -89,12 +88,44 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="example@email.com"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp">
+                <Button
+                    style="@style/Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/changePassword"
+                    android:textColor="@color/colorSubText"
+                    android:backgroundTint="@color/colorBackgroundDarker"
+                    android:onClick="changePassword"/>
+                <Button
+                    style="@style/Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/deleteAccount"
+                    android:textColor="@color/colorError"
+                    android:backgroundTint="@color/colorBackgroundDarker"
+                    android:onClick="deleteAccount"/>
+            </LinearLayout>
         </LinearLayout>
 
-        <View
+        <TextView
+            style="@style/text"
+            android:id="@+id/lDados"
+            android:textColor="@color/colorWhite"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorPrimary"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:gravity="center"
+            android:background="@color/colorSecondary"
+            android:text="@string/dados"
             android:layout_below="@id/llAccount"/>
 
         <LinearLayout
@@ -103,13 +134,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:orientation="vertical"
-            android:layout_below="@id/llAccount">
+            android:layout_below="@id/lDados">
             <TextView
                 style="@style/text"
                 android:id="@+id/tvNameField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 tools:text="@string/fullName"/>
             <TextView
                 style="@style/subText"
@@ -179,6 +209,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="@tools:sample/us_zipcodes"/>
+            <Button
+                style="@style/Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/changeDados"
+                android:textColor="@color/colorSubText"
+                android:backgroundTint="@color/colorBackgroundDarker"
+                android:layout_gravity="center"
+                android:onClick="changeDados"/>
         </LinearLayout>
     </RelativeLayout>
 

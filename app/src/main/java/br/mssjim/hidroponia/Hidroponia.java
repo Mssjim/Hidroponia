@@ -106,22 +106,26 @@ public class Hidroponia extends Application implements Application.ActivityLifec
     }
 
     public static void setStatus(final String status) {
-        Log.i("AppLog", "Atualizando status do usuário...");
-        FirebaseFirestore.getInstance().collection("/data").document(getUser().getUserId())
-                .collection("data").document("status").set(new Status(status, System.currentTimeMillis()))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.i("AppLog", "Status atualizado com sucesso! (" + status + ")");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                        // TODO Catch Block
-                    }
-                });
+        if(user != null) {// TODO Serve para quando a conta for excluida e ele voltar aki não bugar
+            Log.i("AppLog", "Atualizando status do usuário...");
+            FirebaseFirestore.getInstance().collection("/data").document(getUser().getUserId())
+                    .collection("data").document("status").set(new Status(status, System.currentTimeMillis()))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.i("AppLog", "Status atualizado com sucesso! (" + status + ")");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                            // TODO Catch Block
+                        }
+                    });
+        } else {
+            Log.i("AppLog", "user == null"); // TODO Excluir (Teste)
+        }
     }
 
     @Override

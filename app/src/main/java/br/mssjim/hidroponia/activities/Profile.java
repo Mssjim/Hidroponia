@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -52,6 +53,7 @@ public class Profile extends Activity {
 
     private TextView tvEmail;
 
+    private TextView lDados;
     private LinearLayout llDados;
     private TextView tvNameField;
     private TextView tvName;
@@ -64,7 +66,7 @@ public class Profile extends Activity {
     private TextView tvCep;
 
     private AlertDialog.Builder alertDialog;
-    private EditText input;
+    LinearLayout.LayoutParams lp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,7 @@ public class Profile extends Activity {
         tvEmail.setText(user.getEmail());
 
         // Dados
+        lDados = findViewById(R.id.lDados);
         llDados = findViewById(R.id.llDados);
         tvNameField = findViewById(R.id.tvNameField);
         tvName = findViewById(R.id.tvName);
@@ -110,6 +113,7 @@ public class Profile extends Activity {
             tvNameField.setText(getString(R.string.fullName));
             tvCpfField.setText(getString(R.string.cpf));
         } else {
+            lDados.setVisibility(View.GONE);
             llDados.setVisibility(View.GONE);
         }
 
@@ -120,13 +124,17 @@ public class Profile extends Activity {
         tvPhone.setText(String.valueOf(dados.getPhone()));
         tvAddress.setText(dados.getAddress());
         tvCep.setText(dados.getCep());
+
+        lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
     }
 
-    public void createAlertDialog(DialogInterface.OnClickListener listener) {
+    public void createAlertDialog(String s, View view, DialogInterface.OnClickListener listener) {
         // TODO Atualizar 'user', 'roles' e 'dados' para não exibir valores antigos
         alertDialog = null;
         TextView title = new TextView(this);
-        title.setText(R.string.changeUsername);
+        title.setText(s);
         title.setPadding(20, 30, 20, 30);
         title.setTextSize(20F);
         title.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -134,20 +142,10 @@ public class Profile extends Activity {
         title.setTypeface(null, Typeface.BOLD);
         title.setGravity(Gravity.CENTER);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-
-        input = new EditText(this);
-        input.setBackground(getDrawable(R.drawable.bg_edittext));
-        input.setText(user.getUsername());
-        input.setPadding(10, 10, 10, 10);
-        input.setLayoutParams(lp);
-
         final LinearLayout layout = new LinearLayout(this);
         layout.setLayoutParams(lp);
         layout.setPadding(10, 40, 10, 0);
-        layout.addView(input);
+        layout.addView(view);
 
         new AlertDialog.Builder(Profile.this)
                 .setView(layout)
@@ -203,12 +201,81 @@ public class Profile extends Activity {
     }
 
     public void changeUsername(View view) {
-        createAlertDialog(new DialogInterface.OnClickListener() {
+        final EditText input = new EditText(this);
+        input.setBackground(getDrawable(R.drawable.bg_edittext));
+        input.setText(user.getUsername());
+        input.setPadding(10, 10, 10, 10);
+        input.setLayoutParams(lp);
+        createAlertDialog(getString(R.string.changeUsername), input, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 tvUsername.setText(input.getText().toString());
+                Log.i("AppLog", "Alterando dados...");
                 FirebaseFirestore.getInstance().collection("users").
                         document(user.getUserId()).update("username", input.getText().toString());
+                Log.i("AppLog", "Dados Alterados com Sucesso!");
+            }
+        });
+    }
+
+    public void changePassword(View view) {
+
+    }
+
+    public void changeDados(View view) {
+        Intent intent = new Intent(Profile.this, Join.class);
+        startActivity(intent);
+    }
+
+    public void deleteAccount(View view) {
+        final TextView message = new TextView(this);
+        message.setText(getString(R.string.deleteAccountConfirm));
+        message.setTextSize(16F);
+        message.setLayoutParams(lp);
+        createAlertDialog(getString(R.string.deleteAccount), message, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Deletar conta
+                Log.i("AppLog", "Excluindo dados da conta...");
+                Log.i("AppLog", "1/5");
+                FirebaseStorage.getInstance().getReference("/profile-images/" +
+                        user.getUsername() + "(" + user.getEmail() + ")").delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i("AppLog", "2/5");
+                        FirebaseFirestore.getInstance().collection("data").
+                                document(user.getUserId()).delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.i("AppLog", "3/5");
+                                FirebaseAuth.getInstance().getCurrentUser().delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.i("AppLog", "4/5");
+                                        FirebaseAuth.getInstance().signOut();
+                                        FirebaseFirestore.getInstance().collection("users").
+                                                document(user.getUserId()).delete()
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.i("AppLog", "5/5");
+                                                        Log.i("AppLog", "Conta excluída com sucesso!");
+                                                        Intent intent = new Intent(Profile.this, Login.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        startActivity(intent);
+                                                        Hidroponia.setUser(null);
+                                                        System.exit(0); // TODO Arrumar isso pq ainda não entendi pq não bugou 2
+                                                    }
+                                                });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
         });
     }
