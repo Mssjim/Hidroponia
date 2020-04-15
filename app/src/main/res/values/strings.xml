@@ -77,4 +77,6 @@
 
     <string name="razao">Razão Social</string>
     <string name="cnpj">CNPJ</string>
+
+    <string name="changeUsername">Alterar nome de usuário</string>
 </resources>

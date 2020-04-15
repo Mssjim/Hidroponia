@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                tools:text="@string/email"/>
+                android:text="@string/email"/>
             <TextView
                 style="@style/subText"
                 android:id="@+id/tvEmail"
@@ -121,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                tools:text="@string/nasc"/>
+                android:text="@string/nasc"/>
             <TextView
                 style="@style/subText"
                 android:id="@+id/tvData"
@@ -146,7 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                tools:text="@string/phone"/>
+                android:text="@string/phone"/>
             <TextView
                 style="@style/subText"
                 android:id="@+id/tvPhone"
@@ -158,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                tools:text="@string/address"/>
+                android:text="@string/address"/>
             <TextView
                 style="@style/subText"
                 android:id="@+id/tvAddress"
@@ -170,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                tools:text="@string/cep"/>
+                android:text="@string/cep"/>
             <TextView
                 style="@style/subText"
                 android:id="@+id/tvCep"

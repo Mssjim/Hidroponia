@@ -4,15 +4,15 @@ public class Dados {
     private String userId;
     private String name;
     private String date;
-    private int cpf;
+    private String cpf;
     private int phone;
     private String address;
-    private int cep;
+    private String cep;
 
     public Dados() {
     }
 
-    public Dados(String userId, String name, String date, int cpf, int phone, String address, int cep) {
+    public Dados(String userId, String name, String date, String cpf, int phone, String address, String cep) {
         this.userId = userId;
         this.name = name;
         this.date = date;
@@ -21,7 +21,7 @@ public class Dados {
         this.address = address;
         this.cep = cep;
     }
-    public Dados(String userId, String name, int cpf, int phone, String address, int cep) {
+    public Dados(String userId, String name, String cpf, int phone, String address, String cep) {
         this.userId = userId;
         this.name = name;
         this.date = "";
@@ -43,7 +43,7 @@ public class Dados {
         return date;
     }
 
-    public int getCpf() {
+    public String getCpf() {
         return cpf;
     }
 
@@ -55,7 +55,7 @@ public class Dados {
         return address;
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 }

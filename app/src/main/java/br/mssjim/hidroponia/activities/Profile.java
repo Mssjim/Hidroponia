@@ -5,12 +5,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -78,7 +81,7 @@ public class Profile extends Activity {
         tvRole.setText(roles.getRole());
         Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
 
-        tvEmail = findViewById(R.id.etEmail);
+        tvEmail = findViewById(R.id.tvEmail);
 
         tvEmail.setText(user.getEmail());
 
@@ -100,15 +103,17 @@ public class Profile extends Activity {
             tvNameField.setText(getString(R.string.razao));
             tvCpfField.setText(getString(R.string.cnpj));
         } else if (roles.isFarm() || roles.isSale()) {
-
+            tvNameField.setText(getString(R.string.fullName));
+            tvCpfField.setText(getString(R.string.cpf));
         } else {
             llDados.setVisibility(View.GONE);
         }
 
+        // TODO Formatar campos
         tvName.setText(dados.getName());
         tvData.setText(dados.getDate());
         tvCpf.setText(dados.getCpf());
-        tvPhone.setText(dados.getPhone());
+        tvPhone.setText(String.valueOf(dados.getPhone()));
         tvAddress.setText(dados.getAddress());
         tvCep.setText(dados.getCep());
     }
@@ -117,33 +122,34 @@ public class Profile extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 0) {
+            if(data == null) {
+                return;
+            }
             Uri imageUri = data.getData();
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                 ivImage.setImageDrawable(new BitmapDrawable(bitmap));
 
-                if(imageUri == null) { // TODO Testar se um 'return' tem o mesmo efeito
-                    Log.i("AppLog", "Fazendo upload de imagem...");
-                    // TODO Animação durante upload
-                    String filename = user.getUsername() + "(" + user.getEmail() + ")";
-                    final StorageReference ref = FirebaseStorage.getInstance().getReference("/profile-images/" + filename);
-                    ref.putFile(imageUri)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
-                                            FirebaseFirestore.getInstance().collection("users")
-                                                    .document(user.getUserId())
-                                                    .update("profileImage", uri.toString());
-                                        }
-                                    });
-                                }
-                            });
-                }
+                Log.i("AppLog", "Fazendo upload de imagem...");
+                // TODO Animação durante upload
+                String filename = user.getUsername() + "(" + user.getEmail() + ")";
+                final StorageReference ref = FirebaseStorage.getInstance().getReference("/profile-images/" + filename);
+                ref.putFile(imageUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
+                                        FirebaseFirestore.getInstance().collection("users")
+                                                .document(user.getUserId())
+                                                .update("profileImage", uri.toString());
+                                    }
+                                });
+                            }
+                        });
             } catch (IOException e) {
                 // TODO Catch Block
             }
@@ -157,18 +163,34 @@ public class Profile extends Activity {
     }
 
     public void changeUsername(View view) {
-        final EditText input = new EditText(Profile.this);
+        TextView title = new TextView(this);
+        title.setText(R.string.changeUsername);
+        title.setPadding(20, 30, 20, 30);
+        title.setTextSize(20F);
+        title.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        title.setTextColor(getResources().getColor(R.color.colorWhite));
+        title.setTypeface(null, Typeface.BOLD);
+        title.setGravity(Gravity.CENTER);
+
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        lp.leftMargin = 10;
+        lp.rightMargin = 20;
+        final EditText input = new EditText(this);
+        input.setBackground(getDrawable(R.drawable.bg_edittext));
+        input.setText(user.getUsername());
+        input.setPadding(10, 10, 10, 10);
         input.setLayoutParams(lp);
 
-        new AlertDialog.Builder(getApplicationContext())
-                .setTitle("Alterar nome de usuário")
-                .setView(input)
-                .setIcon(R.drawable.ic_edit)
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setLayoutParams(lp);
+        layout.setPadding(10, 40, 10, 0);
+        layout.addView(input);
+
+        new AlertDialog.Builder(Profile.this)
+                .setView(layout)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String s = input.getText().toString();
                         if(TextUtils.isEmpty(s)) {
@@ -180,7 +202,9 @@ public class Profile extends Activity {
                         }
                     }
                 })
-                .setNegativeButton(getString(R.string.cancel), null)
-                .show();
+                .setNegativeButton(android.R.string.no, null)
+                .setCustomTitle(title)
+                .show()
+        .getWindow().setBackgroundDrawable(getDrawable(R.drawable.bg_alertdialog));
     }
 }

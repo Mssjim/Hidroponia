@@ -183,10 +183,10 @@ public class Join extends Activity {
                 Hidroponia.getUser().getUserId(),
                 etName.getText().toString(),
                 etNasc.getText().toString(),
-                Integer.parseInt(etCpf.getText().toString()),
+                etCpf.getText().toString(),
                 Integer.parseInt(etPhone.getText().toString()),
                 etAddress.getText().toString(),
-                Integer.parseInt(etCep.getText().toString())
+                etCep.getText().toString()
         );
 
         Log.i("AppLog", "Adicionando dados ao Firestore...");
@@ -223,10 +223,10 @@ public class Join extends Activity {
         Dados dados = new Dados(
                 Hidroponia.getUser().getUserId(),
                 etRazao.getText().toString(),
-                Integer.parseInt(etCnpj.getText().toString()),
+                etCnpj.getText().toString(),
                 Integer.parseInt(etPhone.getText().toString()),
                 etAddress.getText().toString(),
-                Integer.parseInt(etCep.getText().toString())
+                etCep.getText().toString()
         );
 
         Log.i("AppLog", "Adicionando dados ao Firestore...");
