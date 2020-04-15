@@ -69,12 +69,39 @@
             android:onClick="changeImage"/>
 
         <LinearLayout
-            android:id="@+id/llDados"
+            android:id="@+id/llAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:orientation="vertical"
             android:layout_below="@id/llUser">
+            <TextView
+                style="@style/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                tools:text="@string/email"/>
+            <TextView
+                style="@style/subText"
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="example@email.com"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimary"
+            android:layout_below="@id/llAccount"/>
+
+        <LinearLayout
+            android:id="@+id/llDados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical"
+            android:layout_below="@id/llAccount">
             <TextView
                 style="@style/text"
                 android:id="@+id/tvNameField"

@@ -46,6 +46,8 @@ public class Profile extends Activity {
     private TextView tvUsername;
     private TextView tvRole;
 
+    private TextView tvEmail;
+
     private LinearLayout llDados;
     private TextView tvNameField;
     private TextView tvName;
@@ -75,6 +77,10 @@ public class Profile extends Activity {
         tvUsername.setText(user.getUsername());
         tvRole.setText(roles.getRole());
         Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
+
+        tvEmail = findViewById(R.id.etEmail);
+
+        tvEmail.setText(user.getEmail());
 
         // Dados
         llDados = findViewById(R.id.llDados);
