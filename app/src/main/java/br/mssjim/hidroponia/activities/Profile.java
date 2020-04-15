@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,6 +62,9 @@ public class Profile extends Activity {
     private TextView tvPhone;
     private TextView tvAddress;
     private TextView tvCep;
+
+    private AlertDialog.Builder alertDialog;
+    private EditText input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +122,42 @@ public class Profile extends Activity {
         tvCep.setText(dados.getCep());
     }
 
+    public void createAlertDialog(DialogInterface.OnClickListener listener) {
+        // TODO Atualizar 'user', 'roles' e 'dados' para não exibir valores antigos
+        alertDialog = null;
+        TextView title = new TextView(this);
+        title.setText(R.string.changeUsername);
+        title.setPadding(20, 30, 20, 30);
+        title.setTextSize(20F);
+        title.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        title.setTextColor(getResources().getColor(R.color.colorWhite));
+        title.setTypeface(null, Typeface.BOLD);
+        title.setGravity(Gravity.CENTER);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+
+        input = new EditText(this);
+        input.setBackground(getDrawable(R.drawable.bg_edittext));
+        input.setText(user.getUsername());
+        input.setPadding(10, 10, 10, 10);
+        input.setLayoutParams(lp);
+
+        final LinearLayout layout = new LinearLayout(this);
+        layout.setLayoutParams(lp);
+        layout.setPadding(10, 40, 10, 0);
+        layout.addView(input);
+
+        new AlertDialog.Builder(Profile.this)
+                .setView(layout)
+                .setPositiveButton(android.R.string.yes, listener)
+                .setNegativeButton(android.R.string.no, null)
+                .setCustomTitle(title)
+                .show()
+            .getWindow().setBackgroundDrawable(getDrawable(R.drawable.bg_alertdialog));
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -163,48 +203,18 @@ public class Profile extends Activity {
     }
 
     public void changeUsername(View view) {
-        TextView title = new TextView(this);
-        title.setText(R.string.changeUsername);
-        title.setPadding(20, 30, 20, 30);
-        title.setTextSize(20F);
-        title.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        title.setTextColor(getResources().getColor(R.color.colorWhite));
-        title.setTypeface(null, Typeface.BOLD);
-        title.setGravity(Gravity.CENTER);
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        lp.leftMargin = 10;
-        lp.rightMargin = 20;
-        final EditText input = new EditText(this);
-        input.setBackground(getDrawable(R.drawable.bg_edittext));
-        input.setText(user.getUsername());
-        input.setPadding(10, 10, 10, 10);
-        input.setLayoutParams(lp);
-
-        LinearLayout layout = new LinearLayout(this);
-        layout.setLayoutParams(lp);
-        layout.setPadding(10, 40, 10, 0);
-        layout.addView(input);
-
-        new AlertDialog.Builder(Profile.this)
-                .setView(layout)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String s = input.getText().toString();
-                        if(TextUtils.isEmpty(s)) {
-                            input.setError(getString(R.string.emptyField));
-                        } else {
-                            tvUsername.setText(s);
-                            FirebaseFirestore.getInstance().collection("users").
-                                    document(user.getUserId()).update("username", s);
-                        }
-                    }
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .setCustomTitle(title)
-                .show()
-        .getWindow().setBackgroundDrawable(getDrawable(R.drawable.bg_alertdialog));
+        createAlertDialog(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String s = input.getText().toString();
+                if(TextUtils.isEmpty(s)) {
+                    input.setError(getString(R.string.emptyField));
+                } else {
+                    tvUsername.setText(s);
+                    FirebaseFirestore.getInstance().collection("users").
+                            document(user.getUserId()).update("username", s);
+                }
+            }
+        });
     }
 }
