@@ -206,14 +206,9 @@ public class Profile extends Activity {
         createAlertDialog(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String s = input.getText().toString();
-                if(TextUtils.isEmpty(s)) {
-                    input.setError(getString(R.string.emptyField));
-                } else {
-                    tvUsername.setText(s);
-                    FirebaseFirestore.getInstance().collection("users").
-                            document(user.getUserId()).update("username", s);
-                }
+                tvUsername.setText(input.getText().toString());
+                FirebaseFirestore.getInstance().collection("users").
+                        document(user.getUserId()).update("username", input.getText().toString());
             }
         });
     }
