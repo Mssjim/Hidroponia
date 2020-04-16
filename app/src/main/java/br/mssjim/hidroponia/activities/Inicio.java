@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,9 +28,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 
+import java.util.List;
 import java.util.Objects;
 
 import br.mssjim.hidroponia.Dados;
@@ -111,6 +114,10 @@ public class Inicio extends Activity {
                         tvUsername.setShadowLayer(10, 0, 0, Color.BLACK);
                     } catch (Exception err) {
                         Log.i("AppLog", "Erro: " + err.getLocalizedMessage());
+                        Intent intent = new Intent(Inicio.this, Login.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        System.exit(0); // TODO Arrumar isso pq ainda não entendi pq não bugou
                         // TODO Catch Block
                         return;
                     }
