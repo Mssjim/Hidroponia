@@ -20,6 +20,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -89,100 +91,103 @@ public class Inicio extends Activity {
             return;
         }
 
-        FirebaseFirestore.getInstance().collection("/users").document(id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if(e != null) {
-                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                    // TODO Catch Block
-                    return;
-                }
-                if (documentSnapshot == null) {
-                    Log.i("AppLog", "Erro: Null Exception");
-                    // TODO Catch Block
-                    return;
-                }
-                Hidroponia.setUser(documentSnapshot.toObject(User.class));
-                Hidroponia.setStatus("Online"); // TODO Refatorar status
-                user = Hidroponia.getUser();
+        FirebaseFirestore.getInstance().collection("/users").document(id)
+            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot == null) {
+                        Log.i("AppLog", "Erro: Null Exception");
+                        // TODO Catch Block
+                        return;
+                    }
+                    Hidroponia.setUser(documentSnapshot.toObject(User.class));
+                    Hidroponia.setStatus("Online"); // TODO Refatorar status
+                    user = Hidroponia.getUser();
 
-                // TODO Remover esse e arrumar o 'getUser' da Application
-                try {
-                    tvUsername.setText(user.getUsername());
-                    // TODO Melhorar sombra no campo de texto (talvez)
-                    tvUsername.setShadowLayer(10, 0, 0, Color.BLACK);
-                } catch (Exception err) {
-                    Log.i("AppLog", "Erro: " + err.getLocalizedMessage());
-                    // TODO Catch Block
-                    return;
-                }
-                // TODO Exibir uma imagem padrão ou animação de carregamento
-                Picasso.get().load(user.getProfileImage()).into(ivImage);
+                    // TODO Remover esse e arrumar o 'getUser' da Application
+                    try {
+                        tvUsername.setText(user.getUsername());
+                        // TODO Melhorar sombra no campo de texto (talvez)
+                        tvUsername.setShadowLayer(10, 0, 0, Color.BLACK);
+                    } catch (Exception err) {
+                        Log.i("AppLog", "Erro: " + err.getLocalizedMessage());
+                        // TODO Catch Block
+                        return;
+                    }
+                    // TODO Exibir uma imagem padrão ou animação de carregamento
+                    Picasso.get().load(user.getProfileImage()).into(ivImage);
 
-                FirebaseFirestore.getInstance().collection("/data").document(user.getUserId())
-                        .collection("data").document("roles")
-                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                if(e != null) {
-                                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                                    // TODO Catch Block
-                                    Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                    FirebaseFirestore.getInstance().collection("/data").document(user.getUserId())
+                            .collection("data").document("roles").get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    roles = documentSnapshot.toObject(Roles.class);
 
-                                roles = documentSnapshot.toObject(Roles.class);
+                                    if(roles == null) {
+                                        roles = new Roles();
+                                    }
 
-                                if(roles == null) {
-                                    roles = new Roles();
-                                }
+                                    Hidroponia.setRoles(roles);
 
-                                Hidroponia.setRoles(roles);
+                                    tvRole.setText(roles.getRole());
+                                    // TODO Melhorar sombra no campo de texto (talvez)
+                                    tvRole.setShadowLayer(4, 0, 0, Color.BLACK);
 
-                                tvRole.setText(roles.getRole());
-                                // TODO Melhorar sombra no campo de texto (talvez)
-                                tvRole.setShadowLayer(4, 0, 0, Color.BLACK);
+                                    // TODO Só exibir aqui 'btnComercio'
+                                    if(roles.isOrganic() || roles.isStore()) {
+                                        btnComercio.setText(getString(R.string.meuNegocio));
+                                    } else if(roles.isFarm() || roles.isSale()) {
+                                        btnComercio.setText(getString(R.string.minhaHorta));
+                                    } else if(roles.isStaff()) {
+                                        btnComercio.setText(getString(R.string.panel));
+                                    } else {
+                                        btnComercio.setText(getString(R.string.join));
+                                    }
 
-                                // TODO Só exibir aqui 'btnComercio'
-                                if(roles.isOrganic() || roles.isStore()) {
-                                    btnComercio.setText(getString(R.string.meuNegocio));
-                                } else if(roles.isFarm() || roles.isSale()) {
-                                    btnComercio.setText(getString(R.string.minhaHorta));
-                                } else if(roles.isStaff()) {
-                                    btnComercio.setText(getString(R.string.panel));
-                                } else {
-                                    btnComercio.setText(getString(R.string.join));
-                                }
+                                    FirebaseFirestore.getInstance().collection("/data")
+                                            .document(user.getUserId()).collection("data")
+                                            .document("dados").get()
+                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                    dados = documentSnapshot.toObject(Dados.class);
 
-                                FirebaseFirestore.getInstance().collection("/data")
-                                        .document(user.getUserId()).collection("data")
-                                        .document("dados")
-                                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                                if(e != null) {
+                                                    if(dados == null) {
+                                                        dados = new Dados();
+                                                    }
+                                                    Hidroponia.setDados(dados);
+
+                                                    Log.i("AppLog", "Dados obtidos com sucesso!");
+
+                                                    loadCards();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
                                                     Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
                                                     // TODO Catch Block
-                                                    Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                                    return;
                                                 }
-
-                                                dados = documentSnapshot.toObject(Dados.class);
-
-                                                if(dados == null) {
-                                                    dados = new Dados();
-                                                }
-                                                Hidroponia.setDados(dados);
-
-                                                Log.i("AppLog", "Dados obtidos com sucesso!");
-
-                                                loadCards();
-                                            }
-                                        });
-                            }
-                        });
-            }
-        });
+                                            });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                                    // TODO Catch Block
+                                }
+                            });
+                    }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                    // TODO Catch Block
+                }
+            });
     }
 
     public void loadCards() {
