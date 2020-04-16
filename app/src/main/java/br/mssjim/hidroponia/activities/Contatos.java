@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -74,29 +76,31 @@ public class Contatos extends Activity {
         // TODO Recarregar contatos != Adicionar mais contatos
         // TODO Ordernar contatos Alfabeticamente/Roles
         Log.i("AppLog", "Carregando lista de contatos...");
-        FirebaseFirestore.getInstance().collection("/users").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(e != null) {
-                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                    // TODO Catch Block
-                    return;
-                }
-
-                List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                for (DocumentSnapshot doc : docs) {
-                    final User user = doc.toObject(User.class);
-                    // TODO Carregar contatos separadamente
-                    int delay = 0;
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() { // Handler pra não travar tudo
-                            // TODO Ocultar usuário logado
-                            adapter.add(new UserItem(user));
+        FirebaseFirestore.getInstance().collection("/users").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot doc : docs) {
+                            final User user = doc.toObject(User.class);
+                            // TODO Carregar contatos separadamente
+                            int delay = 0;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() { // Handler pra não travar tudo
+                                    // TODO Ocultar usuário logado
+                                    adapter.add(new UserItem(user));
+                                }
+                            }, delay);
                         }
-                    }, delay);
-                }
-                Log.i("AppLog", "Todos os contatos foram carregados!");
+                        Log.i("AppLog", "Todos os contatos foram carregados!");
+                    }
+                })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                // TODO Catch Block
             }
         });
     }
