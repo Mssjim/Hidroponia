@@ -78,7 +78,7 @@ public class Chat extends Activity {
             public void run() { // Handler pra não travar tudo
                 // TODO Se bugar: [if(userSend != null)]
                 FirebaseFirestore.getInstance().collection("/data").document(userSend.getUserId())
-                        .collection("messages").document("all").collection(user.getUserId())
+                        .collection("messages").document(user.getUserId()).collection("all")
                         .orderBy("time", Query.Direction.ASCENDING)
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
@@ -118,8 +118,8 @@ public class Chat extends Activity {
 
         Log.i("AppLog", "1/2 - Adicionando mensagem ao Firestore...");
         FirebaseFirestore.getInstance().collection("/data").document(userSendId)
-                .collection("messages").document("all")
-                .collection(userId).document(Long.toString(time)).set(message)
+                .collection("messages").document(userId)
+                .collection("all").document(Long.toString(time)).set(message)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -154,8 +154,8 @@ public class Chat extends Activity {
 
         Log.i("AppLog", "2/2 - Adicionando mensagem ao Firestore...");
         FirebaseFirestore.getInstance().collection("/data").document(userId)
-                .collection("messages").document("all")
-                .collection(userSendId).document(Long.toString(time)).set(message)
+                .collection("messages").document(userSendId)
+                .collection("all").document(Long.toString(time)).set(message)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
