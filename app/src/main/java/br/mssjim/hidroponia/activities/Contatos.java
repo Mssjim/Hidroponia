@@ -121,17 +121,10 @@ public class Contatos extends Activity {
             tvUsername.setText(user.getUsername());
             Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
             FirebaseFirestore.getInstance().collection("/data").document(user.getUserId())
-                    .collection("data").document("status")
-                    .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        if(e != null) {
-                            Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                            // TODO Catch Block
-                            Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
+                    .collection("data").document("status").get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
                         Status status = documentSnapshot.toObject(Status.class);
 
                         if (status != null) {
@@ -139,6 +132,14 @@ public class Contatos extends Activity {
                             // TODO Exibir última vez visto
                         }
                     }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                    // TODO Catch Block
+                    Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                }
             });
         }
 
