@@ -176,7 +176,7 @@ public class Profile extends Activity {
                 .setNegativeButton(android.R.string.no, null)
                 .setCustomTitle(title)
                 .show()
-            .getWindow().setBackgroundDrawable(getDrawable(R.drawable.bg_alertdialog));
+                .getWindow().setBackgroundDrawable(getDrawable(R.drawable.bg_alertdialog));
     }
 
     @Override
@@ -186,6 +186,7 @@ public class Profile extends Activity {
             if(data == null) {
                 return;
             }
+            Log.i("AppLog", "Alterando Imagem do usuário");
             Uri imageUri = data.getData();
             Bitmap bitmap = null;
             try {
@@ -206,7 +207,14 @@ public class Profile extends Activity {
                                         Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
                                         FirebaseFirestore.getInstance().collection("users")
                                                 .document(user.getUserId())
-                                                .update("profileImage", uri.toString());
+                                                .update("profileImage", uri.toString())
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(getApplicationContext(), getString(R.string.changeImageSuccess), Toast.LENGTH_SHORT).show();
+                                                        Log.i("AppLog", getString(R.string.changeImageSuccess));
+                                                    }
+                                                });
                                     }
                                 });
                             }
@@ -236,12 +244,13 @@ public class Profile extends Activity {
                 Log.i("AppLog", "Alterando nome de usuário...");
                 FirebaseFirestore.getInstance().collection("users")
                         .document(user.getUserId()).update("username", input.getText().toString())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.i("AppLog", "Nome de usuário alterado com sucesso!");
-                    }
-                });
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getApplicationContext(), getString(R.string.changeUsernameSuccess), Toast.LENGTH_SHORT).show();
+                                Log.i("AppLog", getString(R.string.changeUsernameSuccess));
+                            }
+                        });
             }
         });
     }
@@ -268,43 +277,44 @@ public class Profile extends Activity {
                 if(!newPassword.isEmpty()) {
                     FirebaseAuth.getInstance().getCurrentUser()
                             .reauthenticate(EmailAuthProvider.getCredential(user.getEmail(), password))
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            FirebaseAuth.getInstance().getCurrentUser()
-                                    .updatePassword(newPassword)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    FirebaseFirestore.getInstance().collection("users")
-                                            .document(user.getUserId())
-                                            .update("password", Hash.code(newPassword))
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.i("AppLog", "Senha alterada com sucesso!");
-                                        }
-                                    });
+                                    FirebaseAuth.getInstance().getCurrentUser()
+                                            .updatePassword(newPassword)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    FirebaseFirestore.getInstance().collection("users")
+                                                            .document(user.getUserId())
+                                                            .update("password", Hash.code(newPassword))
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Toast.makeText(getApplicationContext(), getString(R.string.changePasswordSuccess), Toast.LENGTH_SHORT).show();
+                                                                    Log.i("AppLog", getString(R.string.changePasswordSuccess));
+                                                                }
+                                                            });
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    // TODO Exibir novamente o AlertDialog
+                                                    Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                                    Log.i("AppLog", e.getLocalizedMessage());
+                                                }
+                                            });
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     // TODO Exibir novamente o AlertDialog
-                                    Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                    Log.i("AppLog", e.getLocalizedMessage());
+                                    Toast.makeText(getApplicationContext(), getString(R.string.invalidPassword), Toast.LENGTH_SHORT).show();
+                                    Log.i("AppLog", getString(R.string.invalidPassword) + e.getLocalizedMessage());
                                 }
                             });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // TODO Exibir novamente o AlertDialog
-                            Toast.makeText(getApplicationContext(), getString(R.string.invalidPassword), Toast.LENGTH_SHORT).show();
-                            Log.i("AppLog", getString(R.string.invalidPassword) + e.getLocalizedMessage());
-                        }
-                    });
                 } else {
                     // TODO Exibir novamente o AlertDialog
                     Toast.makeText(getApplicationContext(), getString(R.string.emptyPassword), Toast.LENGTH_SHORT).show();
@@ -332,94 +342,94 @@ public class Profile extends Activity {
                 Log.i("AppLog", "Excluindo dados da conta...");
                 Log.i("AppLog", "1/5");
                 FirebaseStorage.getInstance().getReference("/profile-images/" +
-                user.getUsername() + "(" + user.getEmail() + ")").delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.i("AppLog", "2/5");
-                        FirebaseFirestore.getInstance().collection("users").
-                        document(user.getUserId()).delete()
+                        user.getUsername() + "(" + user.getEmail() + ")").delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Log.i("AppLog", "3/5");
-                                FirebaseFirestore.getInstance().collection("data")
-                                .document(user.getUserId()).collection("data").get()
-                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                        final List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                                        i = 0;
-                                        for (DocumentSnapshot doc : docs) {
-                                            Log.i("AppLog", "Excluindo Data ("+ ++i +"/" + docs.size() +  ")... (" + doc.getReference().getPath() + ")");
-                                            doc.getReference().delete()
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    if(docs.size() == i) {
-                                                        FirebaseFirestore.getInstance().collection("data")
-                                                        .document(user.getUserId()).collection("last-messages").get()
+                                Log.i("AppLog", "2/5");
+                                FirebaseFirestore.getInstance().collection("users").
+                                        document(user.getUserId()).delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.i("AppLog", "3/5");
+                                                FirebaseFirestore.getInstance().collection("data")
+                                                        .document(user.getUserId()).collection("data").get()
                                                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                                             @Override
                                                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                                                 final List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                                                                 i = 0;
-                                                                mensagens = Math.max(mensagens, docs.size());
                                                                 for (DocumentSnapshot doc : docs) {
-                                                                    Log.i("AppLog", "Excluindo Mensagens (" + ++i + "/" + docs.size() + ")... (" + doc.getReference().getPath() + ")");
-                                                                    final String path = doc.getReference().getPath().substring(doc.getReference().getPath().lastIndexOf("/"));
+                                                                    Log.i("AppLog", "Excluindo Data ("+ ++i +"/" + docs.size() +  ")... (" + doc.getReference().getPath() + ")");
                                                                     doc.getReference().delete()
-                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                        @Override
-                                                                        public void onSuccess(Void aVoid) {
-                                                                            FirebaseFirestore.getInstance().collection("data")
-                                                                            .document(user.getUserId()).collection("messages")
-                                                                            .document(path).collection("all").get()
-                                                                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
-                                                                                public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
-                                                                                    final List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                                                                                    j = 0;
-                                                                                    for (final DocumentSnapshot doc : docs) {
-                                                                                        Log.i("AppLog", "Excluindo Mensagens (" + i + "/" + mensagens + ") (" + ++j + "/" + docs.size() + ") ... (" + doc.getReference().getPath() + ")");
-                                                                                        doc.getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                            @Override
-                                                                                            public void onSuccess(Void aVoid) {
-                                                                                                FirebaseFirestore.getInstance().collection("data")
-                                                                                                .document(user.getUserId()).get()
-                                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                public void onSuccess(Void aVoid) {
+                                                                                    if(docs.size() == i) {
+                                                                                        FirebaseFirestore.getInstance().collection("data")
+                                                                                                .document(user.getUserId()).collection("last-messages").get()
+                                                                                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                                                                                     @Override
-                                                                                                    public void onSuccess(final DocumentSnapshot documentSnapshot) {
-                                                                                                        new Handler().postDelayed(new Runnable() {
-                                                                                                            @Override
-                                                                                                            public void run() {
-                                                                                                                if(!documentSnapshot.exists()) {
-                                                                                                                    ok();
-                                                                                                                }
-                                                                                                            }
-                                                                                                        }, 5000);
+                                                                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                                                                        final List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                                                                                                        i = 0;
+                                                                                                        mensagens = Math.max(mensagens, docs.size());
+                                                                                                        for (DocumentSnapshot doc : docs) {
+                                                                                                            Log.i("AppLog", "Excluindo Mensagens (" + ++i + "/" + docs.size() + ")... (" + doc.getReference().getPath() + ")");
+                                                                                                            final String path = doc.getReference().getPath().substring(doc.getReference().getPath().lastIndexOf("/"));
+                                                                                                            doc.getReference().delete()
+                                                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                                                        @Override
+                                                                                                                        public void onSuccess(Void aVoid) {
+                                                                                                                            FirebaseFirestore.getInstance().collection("data")
+                                                                                                                                    .document(user.getUserId()).collection("messages")
+                                                                                                                                    .document(path).collection("all").get()
+                                                                                                                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                                                                                                        @Override
+                                                                                                                                        public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
+                                                                                                                                            final List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                                                                                                                                            j = 0;
+                                                                                                                                            for (final DocumentSnapshot doc : docs) {
+                                                                                                                                                Log.i("AppLog", "Excluindo Mensagens (" + i + "/" + mensagens + ") (" + ++j + "/" + docs.size() + ") ... (" + doc.getReference().getPath() + ")");
+                                                                                                                                                doc.getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                                                                                    @Override
+                                                                                                                                                    public void onSuccess(Void aVoid) {
+                                                                                                                                                        FirebaseFirestore.getInstance().collection("data")
+                                                                                                                                                                .document(user.getUserId()).get()
+                                                                                                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                                                                                                    @Override
+                                                                                                                                                                    public void onSuccess(final DocumentSnapshot documentSnapshot) {
+                                                                                                                                                                        new Handler().postDelayed(new Runnable() {
+                                                                                                                                                                            @Override
+                                                                                                                                                                            public void run() {
+                                                                                                                                                                                if(!documentSnapshot.exists()) {
+                                                                                                                                                                                    ok();
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }, 5000);
+                                                                                                                                                                    }
+                                                                                                                                                                });
+                                                                                                                                                    }
+                                                                                                                                                });
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    });
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                        }
                                                                                                     }
                                                                                                 });
-                                                                                            }
-                                                                                        });
                                                                                     }
                                                                                 }
                                                                             });
-                                                                        }
-                                                                    });
                                                                 }
                                                             }
                                                         });
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
+                                            }
+                                        });
                             }
                         });
-                    }
-                });
             }
         });
     }
