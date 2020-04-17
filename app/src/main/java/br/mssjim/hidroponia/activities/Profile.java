@@ -26,8 +26,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -48,6 +51,7 @@ import br.mssjim.hidroponia.Hidroponia;
 import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.Roles;
 import br.mssjim.hidroponia.User;
+import br.mssjim.hidroponia.utils.Hash;
 
 
 public class Profile extends Activity {
@@ -140,7 +144,7 @@ public class Profile extends Activity {
                 LinearLayout.LayoutParams.MATCH_PARENT);
     }
 
-    public void createAlertDialog(String s, View view, DialogInterface.OnClickListener listener) {
+    public void createAlertDialog(String s, View view, View view2, DialogInterface.OnClickListener listener) {
         // TODO Atualizar 'user', 'roles' e 'dados' para não exibir valores antigos
         alertDialog = null;
         TextView title = new TextView(this);
@@ -155,7 +159,16 @@ public class Profile extends Activity {
         final LinearLayout layout = new LinearLayout(this);
         layout.setLayoutParams(lp);
         layout.setPadding(10, 40, 10, 0);
+        layout.setOrientation(LinearLayout.VERTICAL);
         layout.addView(view);
+        if(view2 != null) {
+            TextView space = new TextView(this);
+            space.setLayoutParams(lp);
+            space.setPadding(0, 10, 0, 0);
+
+            layout.addView(space);
+            layout.addView(view2);
+        }
 
         new AlertDialog.Builder(Profile.this)
                 .setView(layout)
@@ -214,22 +227,91 @@ public class Profile extends Activity {
         final EditText input = new EditText(this);
         input.setBackground(getDrawable(R.drawable.bg_edittext));
         input.setText(user.getUsername());
-        input.setPadding(10, 10, 10, 10);
+        input.setPadding(15, 20, 15, 20);
         input.setLayoutParams(lp);
-        createAlertDialog(getString(R.string.changeUsername), input, new DialogInterface.OnClickListener() {
+        createAlertDialog(getString(R.string.changeUsername), input, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 tvUsername.setText(input.getText().toString());
-                Log.i("AppLog", "Alterando dados...");
-                FirebaseFirestore.getInstance().collection("users").
-                        document(user.getUserId()).update("username", input.getText().toString());
-                Log.i("AppLog", "Dados Alterados com Sucesso!");
+                Log.i("AppLog", "Alterando nome de usuário...");
+                FirebaseFirestore.getInstance().collection("users")
+                        .document(user.getUserId()).update("username", input.getText().toString())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i("AppLog", "Nome de usuário alterado com sucesso!");
+                    }
+                });
             }
         });
     }
 
     public void changePassword(View view) {
+        final EditText inputPassword = new EditText(this);
+        inputPassword.setBackground(getDrawable(R.drawable.bg_edittext));
+        inputPassword.setHint(getString(R.string.currentPassword));
+        inputPassword.setPadding(15, 20, 15, 20);
+        inputPassword.setLayoutParams(lp);
 
+        final EditText inputNewPassword = new EditText(Profile.this);
+        inputNewPassword.setBackground(getDrawable(R.drawable.bg_edittext));
+        inputNewPassword.setHint(getString(R.string.newPassword));
+        inputNewPassword.setPadding(15, 20, 15, 20);
+        inputNewPassword.setLayoutParams(lp);
+
+        createAlertDialog(getString(R.string.changePassword), inputPassword, inputNewPassword, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.i("AppLog", "Alterando senha...");
+                final String password = inputPassword.getText().toString();
+                final String newPassword = inputNewPassword.getText().toString();
+                if(!newPassword.isEmpty()) {
+                    FirebaseAuth.getInstance().getCurrentUser()
+                            .reauthenticate(EmailAuthProvider.getCredential(user.getEmail(), password))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            FirebaseAuth.getInstance().getCurrentUser()
+                                    .updatePassword(newPassword)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    FirebaseFirestore.getInstance().collection("users")
+                                            .document(user.getUserId())
+                                            .update("password", Hash.code(newPassword))
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.i("AppLog", "Senha alterada com sucesso!");
+                                        }
+                                    });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // TODO Exibir novamente o AlertDialog
+                                    Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    Log.i("AppLog", e.getLocalizedMessage());
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // TODO Exibir novamente o AlertDialog
+                            Toast.makeText(getApplicationContext(), getString(R.string.invalidPassword), Toast.LENGTH_SHORT).show();
+                            Log.i("AppLog", getString(R.string.invalidPassword) + e.getLocalizedMessage());
+                        }
+                    });
+                } else {
+                    // TODO Exibir novamente o AlertDialog
+                    Toast.makeText(getApplicationContext(), getString(R.string.emptyPassword), Toast.LENGTH_SHORT).show();
+                    Log.i("AppLog", getString(R.string.emptyPassword));
+                }
+            }
+        });
     }
 
     public void changeDados(View view) {
@@ -243,7 +325,7 @@ public class Profile extends Activity {
         message.setText(getString(R.string.deleteAccountConfirm));
         message.setTextSize(16F);
         message.setLayoutParams(lp);
-        createAlertDialog(getString(R.string.deleteAccount), message, new DialogInterface.OnClickListener() {
+        createAlertDialog(getString(R.string.deleteAccount), message, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // TODO Deletar conta

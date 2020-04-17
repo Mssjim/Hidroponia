@@ -82,12 +82,15 @@
     <string name="addressNumber">Número</string>
     <string name="cep">CEP</string>
 
-    <string name="razao">Razão Social</string>
+    <string name="razao">Razão social</string>
     <string name="cnpj">CNPJ</string>
 
     <string name="dados">Dados</string>
     <string name="changeUsername">Alterar nome de usuário</string>
     <string name="changePassword">Alterar Senha</string>
+    <string name="currentPassword">Senha atual</string>
+    <string name="newPassword">Nova senha</string>
+    <string name="invalidPassword">Senha incorreta!</string>
     <string name="changeDados">Alterar Dados</string>
     <string name="deleteAccount">Excluir Conta</string>
     <string name="deleteAccountConfirm">Tem certeza que deseja excluir a conta?\nEssa ação é irreversível!</string>
