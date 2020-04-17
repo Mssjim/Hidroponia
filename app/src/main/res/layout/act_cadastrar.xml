@@ -55,7 +55,7 @@
             style="@style/EditText"
             android:id="@+id/etPasswordConfirm"
             android:inputType="textPassword"
-            android:hint="@string/passwordConfirm"/>
+            android:hint="@string/confirmPassword"/>
 
         <Button
             style="@style/Button"

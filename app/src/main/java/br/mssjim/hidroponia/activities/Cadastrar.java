@@ -12,7 +12,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -31,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.User;
@@ -96,32 +94,32 @@ public class Cadastrar extends Activity {
 
         if(username.isEmpty()) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, "É necessário informar um nome de Usuário!", Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            Toast.makeText(this, getString(R.string.emptyUsername), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
             return;
         }
         if(email.isEmpty()) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, "É necessário informar um endereço de E-mail!", Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            Toast.makeText(this, getString(R.string.emptyEmail), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
             return;
         }
         if(password.isEmpty()) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, "É necessário informar uma Senha!", Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            Toast.makeText(this, getString(R.string.emptyPassword), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
             return;
         }
         if(passwordConfirm.isEmpty()) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, "É necessário confirmar a sua Senha!", Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            Toast.makeText(this, getString(R.string.unconfirmedPassword), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
             return;
         }
         if(!email.contains("@")) { // TODO Melhorar verificação de e-mail
             // TODO Animação de campo inválido
-            Toast.makeText(this, "Informe um E-mail válido!", Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            Toast.makeText(this, getString(R.string.invalidEmail), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
             return;
         }
         if(!passwordConfirm.equals(password)) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, "As senhas não coincidem!", Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            Toast.makeText(this, getString(R.string.unmatchedPassword), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
             return;
         }
 
