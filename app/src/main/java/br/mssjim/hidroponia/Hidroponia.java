@@ -106,10 +106,12 @@ public class Hidroponia extends Application implements Application.ActivityLifec
     }
 
     public static void setStatus(final String status) {
-        if(user != null) {// TODO Serve para quando a conta for excluida e ele voltar aki não bugar
+        if(user != null) { // TODO Serve para quando a conta for excluida e ele voltar aki não bugar
             Log.i("AppLog", "Atualizando status do usuário...");
-            FirebaseFirestore.getInstance().collection("/data").document(getUser().getUserId())
-                    .collection("data").document("status").set(new Status(status, System.currentTimeMillis()))
+            FirebaseFirestore.getInstance().collection("/data")
+                    .document(user.getUserId()).collection("data")
+                    .document("status")
+                    .set(new Status(status, System.currentTimeMillis()))
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -130,7 +132,6 @@ public class Hidroponia extends Application implements Application.ActivityLifec
 
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-
     }
 
     @Override
@@ -146,12 +147,10 @@ public class Hidroponia extends Application implements Application.ActivityLifec
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-
     }
 
     @Override
@@ -167,11 +166,9 @@ public class Hidroponia extends Application implements Application.ActivityLifec
 
     @Override
     public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
-
     }
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
-
     }
 }
