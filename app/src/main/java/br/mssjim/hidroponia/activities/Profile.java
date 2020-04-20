@@ -194,9 +194,8 @@ public class Profile extends Activity {
                 ivImage.setImageDrawable(new BitmapDrawable(bitmap));
 
                 Log.i("AppLog", "Fazendo upload de imagem...");
-                // TODO Animação durante upload
-                String filename = user.getUsername() + "(" + user.getEmail() + ")";
-                final StorageReference ref = FirebaseStorage.getInstance().getReference("/profile-images/" + filename);
+                // TODO Animação durante upload;
+                final StorageReference ref = FirebaseStorage.getInstance().getReference("/profile-images/" + user.getUserId());
                 ref.putFile(imageUri)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -342,7 +341,7 @@ public class Profile extends Activity {
                 Log.i("AppLog", "Excluindo dados da conta...");
                 Log.i("AppLog", "1/5");
                 FirebaseStorage.getInstance().getReference("/profile-images/" +
-                        user.getUsername() + "(" + user.getEmail() + ")").delete()
+                        user.getUserId()).delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

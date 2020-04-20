@@ -136,8 +136,8 @@ public class Cadastrar extends Activity {
                         Log.i("AppLog", "Usuário cadastrado com Sucesso! User: " + etUser.getText() + " - Email: " + etEmail.getText());
                         Log.i("AppLog", "Fazendo upload de imagem...");
                         // TODO Animação durante upload
-                        String filename = username + "(" + email + ")";
-                        final StorageReference ref = FirebaseStorage.getInstance().getReference("/profile-images/" + filename);
+                        final String id = FirebaseAuth.getInstance().getUid();
+                        final StorageReference ref = FirebaseStorage.getInstance().getReference("/profile-images/" + id);
                         ref.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -145,7 +145,6 @@ public class Cadastrar extends Activity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
-                                        String id = FirebaseAuth.getInstance().getUid();
                                         User user = new User(id, username, email, Hash.code(password), uri.toString());
 
                                         Log.i("AppLog", "Adicionando usuário ao Firestore...");
