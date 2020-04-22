@@ -118,7 +118,7 @@ public class Profile extends Activity {
         tvAddress = findViewById(R.id.tvAddress);
         tvCep = findViewById(R.id.tvCep);
 
-        if(roles.isOrganic() || roles.isStore()) {
+        if (roles.isOrganic() || roles.isStore()) {
             tvDataField.setVisibility(View.GONE);
             tvData.setVisibility(View.GONE);
             tvNameField.setText(getString(R.string.razao));
@@ -161,7 +161,7 @@ public class Profile extends Activity {
         layout.setPadding(10, 40, 10, 0);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.addView(view);
-        if(view2 != null) {
+        if (view2 != null) {
             TextView space = new TextView(this);
             space.setLayoutParams(lp);
             space.setPadding(0, 10, 0, 0);
@@ -182,8 +182,8 @@ public class Profile extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 0) {
-            if(data == null) {
+        if (requestCode == 0) {
+            if (data == null) {
                 return;
             }
             Log.i("AppLog", "Alterando Imagem do usuário");
@@ -273,7 +273,7 @@ public class Profile extends Activity {
                 Log.i("AppLog", "Alterando senha...");
                 final String password = inputPassword.getText().toString();
                 final String newPassword = inputNewPassword.getText().toString();
-                if(!newPassword.isEmpty()) {
+                if (!newPassword.isEmpty()) {
                     FirebaseAuth.getInstance().getCurrentUser()
                             .reauthenticate(EmailAuthProvider.getCredential(user.getEmail(), password))
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -338,88 +338,95 @@ public class Profile extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // TODO Deletar conta
-                Log.i("AppLog", "Excluindo dados da conta...");
-                Log.i("AppLog", "1/5");
-                FirebaseStorage.getInstance().getReference("/profile-images/" +
-                        user.getUserId()).delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.i("AppLog", "2/5");
-                                FirebaseFirestore.getInstance().collection("users").
-                                        document(user.getUserId()).delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                deleteData();
+            }
+        });
+    }
+
+    public void deleteData() {
+        Log.i("AppLog", "1/5 - Apagando data...");
+        FirebaseFirestore.getInstance().collection("data").document(user.getUserId())
+                .collection("data").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        final List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                        i = 0;
+                        for (DocumentSnapshot doc : docs) {
+                            Log.i("AppLog", "    [" + ++i + "/" + docs.size() + "] - " + doc.getReference().getPath());
+                            doc.getReference().delete()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (docs.size() == i) {
+                                                deleteMessages();
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.i("AppLog", "Erro: " + task.getException().getLocalizedMessage());
+                        }
+                    }
+                });
+    }
+
+    public void deleteMessages() {
+        Log.i("AppLog", "2/5 - Apagando mensagens...");
+        FirebaseFirestore.getInstance().collection("data").document(user.getUserId())
+                .collection("last-messages").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        i = 0;
+                        if (task.isSuccessful()) {
+                            if (task.getResult().isEmpty()) {
+                                deleteUser();
+                            }
+                            final List<DocumentSnapshot> docs = task.getResult().getDocuments();
+                            mensagens = Math.max(mensagens, docs.size());
+                            for (DocumentSnapshot doc : docs) {
+                                Log.i("AppLog", "    [" + ++i + "/" + docs.size() + "] - " + doc.getReference().getPath());
+                                final String path = doc.getReference().getPath()
+                                        .substring(doc.getReference().getPath().lastIndexOf("/"));
+                                doc.getReference().delete()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.i("AppLog", "3/5");
+                                            public void onComplete(@NonNull Task<Void> task) {
                                                 FirebaseFirestore.getInstance().collection("data")
-                                                        .document(user.getUserId()).collection("data").get()
+                                                        .document(user.getUserId()).collection("messages")
+                                                        .document(path).collection("all").get()
                                                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                                             @Override
-                                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                            public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
                                                                 final List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                                                                i = 0;
-                                                                for (DocumentSnapshot doc : docs) {
-                                                                    Log.i("AppLog", "Excluindo Data ("+ ++i +"/" + docs.size() +  ")... (" + doc.getReference().getPath() + ")");
+                                                                j = 0;
+                                                                for (final DocumentSnapshot doc : docs) {
+                                                                    Log.i("AppLog", "        [" + ++j + "/" + docs.size() + "] - " + doc.getReference().getPath());
                                                                     doc.getReference().delete()
-                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                                 @Override
-                                                                                public void onSuccess(Void aVoid) {
-                                                                                    if(docs.size() == i) {
-                                                                                        FirebaseFirestore.getInstance().collection("data")
-                                                                                                .document(user.getUserId()).collection("last-messages").get()
-                                                                                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                                                                    @Override
-                                                                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                                                                        final List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                                                                                                        i = 0;
-                                                                                                        mensagens = Math.max(mensagens, docs.size());
-                                                                                                        for (DocumentSnapshot doc : docs) {
-                                                                                                            Log.i("AppLog", "Excluindo Mensagens (" + ++i + "/" + docs.size() + ")... (" + doc.getReference().getPath() + ")");
-                                                                                                            final String path = doc.getReference().getPath().substring(doc.getReference().getPath().lastIndexOf("/"));
-                                                                                                            doc.getReference().delete()
-                                                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                                                        @Override
-                                                                                                                        public void onSuccess(Void aVoid) {
-                                                                                                                            FirebaseFirestore.getInstance().collection("data")
-                                                                                                                                    .document(user.getUserId()).collection("messages")
-                                                                                                                                    .document(path).collection("all").get()
-                                                                                                                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                                                                                                        @Override
-                                                                                                                                        public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
-                                                                                                                                            final List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
-                                                                                                                                            j = 0;
-                                                                                                                                            for (final DocumentSnapshot doc : docs) {
-                                                                                                                                                Log.i("AppLog", "Excluindo Mensagens (" + i + "/" + mensagens + ") (" + ++j + "/" + docs.size() + ") ... (" + doc.getReference().getPath() + ")");
-                                                                                                                                                doc.getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                                                                                    @Override
-                                                                                                                                                    public void onSuccess(Void aVoid) {
-                                                                                                                                                        FirebaseFirestore.getInstance().collection("data")
-                                                                                                                                                                .document(user.getUserId()).get()
-                                                                                                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                                                                                                                    @Override
-                                                                                                                                                                    public void onSuccess(final DocumentSnapshot documentSnapshot) {
-                                                                                                                                                                        new Handler().postDelayed(new Runnable() {
-                                                                                                                                                                            @Override
-                                                                                                                                                                            public void run() {
-                                                                                                                                                                                if(!documentSnapshot.exists()) {
-                                                                                                                                                                                    ok();
-                                                                                                                                                                                }
-                                                                                                                                                                            }
-                                                                                                                                                                        }, 5000);
-                                                                                                                                                                    }
-                                                                                                                                                                });
-                                                                                                                                                    }
-                                                                                                                                                });
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    });
-                                                                                                                        }
-                                                                                                                    });
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                    FirebaseFirestore.getInstance().collection("data")
+                                                                                            .document(user.getUserId()).get()
+                                                                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                                                @Override
+                                                                                                public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
+                                                                                                    new Handler().postDelayed(new Runnable() {
+                                                                                                        @Override
+                                                                                                        public void run() {
+                                                                                                            if (!task.getResult().exists()) {
+                                                                                                                deleteUser();
+                                                                                                            }
                                                                                                         }
-                                                                                                    }
-                                                                                                });
-                                                                                    }
+                                                                                                    }, 5000);
+                                                                                                }
+                                                                                            });
                                                                                 }
                                                                             });
                                                                 }
@@ -428,19 +435,58 @@ public class Profile extends Activity {
                                             }
                                         });
                             }
-                        });
-            }
-        });
+                        } else {
+                            Log.i("AppLog", "Erro: " + task.getException().getLocalizedMessage());
+                            deleteUser();
+                        }
+                    }
+                });
     }
 
-    public void ok() {
-        Log.i("AppLog", "4/5");
-        FirebaseAuth.getInstance().getCurrentUser().delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void deleteUser() {
+        Log.i("AppLog", "3/5 - Apagando usuário...");
+        FirebaseFirestore.getInstance().collection("users").document(user.getUserId())
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful()) {
+                            Log.i("AppLog", "Erro: " + task.getException().getLocalizedMessage());
+                        }
+
+                        deleteMedia();
+                    }
+                });
+
+    }
+
+    public void deleteMedia() {
+        Log.i("AppLog", "4/5 - Apagando arquivos...");
+        FirebaseStorage.getInstance().
+                getReference("/profile-images/" + user.getUserId()).delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful()) {
+                            Log.i("AppLog", "Erro: " + task.getException().getLocalizedMessage());
+                        }
+
+                        deleteAuth();
+                    }
+                });
+    }
+
+    public void deleteAuth() {
+        Log.i("AppLog", "5/5 - Finalizando...");
+        // TODO Autenticação não é excluída
+        FirebaseAuth.getInstance().getCurrentUser().delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful()) {
+                            Log.i("AppLog", "Erro: " + task.getException().getLocalizedMessage());
+                        }
                         FirebaseAuth.getInstance().signOut();
-                        Log.i("AppLog", "5/5");
                         Log.i("AppLog", "Conta excluída com sucesso!");
                         Intent intent = new Intent(Profile.this, Login.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
