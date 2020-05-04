@@ -29,6 +29,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
@@ -203,7 +204,8 @@ public class Inicio extends Activity {
     public void loadCards() {
         Log.i("AppLog", "Carregando publicações...");
         // TODO alimentar recycle view
-        FirebaseFirestore.getInstance().collection("/publish").get()
+        FirebaseFirestore.getInstance().collection("/publish")
+                .orderBy("time", Query.Direction.DESCENDING).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
