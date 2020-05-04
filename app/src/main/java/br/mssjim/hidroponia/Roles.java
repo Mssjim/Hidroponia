@@ -73,4 +73,12 @@ public class Roles {
     public void setStaff(boolean staff) {
         this.staff = staff;
     }
+
+    public boolean isVisitor() {
+        if(this.farm || this.sale || this.organic || this.store || this.staff) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

@@ -48,7 +48,7 @@ public class Inicio extends Activity {
     private Dados dados;
 
     private GroupAdapter adapter;
-    private Button btnComercio;
+    private Button btnPublish;
     private TextView tvUsername;
     private TextView tvRole;
     private ImageView ivImage;
@@ -59,7 +59,7 @@ public class Inicio extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_inicio);
 
-        btnComercio = findViewById(R.id.btnComercio);
+        btnPublish = findViewById(R.id.btnPublish);
         tvUsername = findViewById(R.id.tvUsername);
         tvRole = findViewById(R.id.tvRole);
         ivImage = findViewById(R.id.ivImage);
@@ -141,15 +141,11 @@ public class Inicio extends Activity {
                                     // TODO Melhorar sombra no campo de texto (talvez)
                                     tvRole.setShadowLayer(4, 0, 0, Color.BLACK);
 
-                                    // TODO Só exibir aqui 'btnComercio'
-                                    if(roles.isOrganic() || roles.isStore()) {
-                                        btnComercio.setText(getString(R.string.meuNegocio));
-                                    } else if(roles.isFarm() || roles.isSale()) {
-                                        btnComercio.setText(getString(R.string.minhaHorta));
-                                    } else if(roles.isStaff()) {
-                                        btnComercio.setText(getString(R.string.panel));
+                                    // TODO Só exibir aqui 'btnComercio' (BtnPublish)
+                                    if(roles.isVisitor()) {
+                                        btnPublish.setText(getString(R.string.join));
                                     } else {
-                                        btnComercio.setText(getString(R.string.join));
+                                        btnPublish.setText(getString(R.string.publish));
                                     }
 
                                     FirebaseFirestore.getInstance().collection("/data")
@@ -233,16 +229,12 @@ public class Inicio extends Activity {
         startActivity(intent);
     }
 
-    public void comercio(View view) {
-        if(roles.isOrganic() || roles.isStore()) {
-            // TODO Iniciar Activity 'MeuNegocio'
-        } else if(roles.isFarm() || roles.isSale()) {
-            // TODO Iniciar Activity 'MinhaHorta'
-        } else if(roles.isStaff()) {
-            // TODO Iniciar Activity 'Panel'
-        } else {
+    public void publish(View view) {
+        if(roles.isVisitor()) {
             Intent intent = new Intent(Inicio.this, Join.class);
             startActivity(intent);
+        } else {
+            // TODO Iniciar novo post
         }
     }
 }

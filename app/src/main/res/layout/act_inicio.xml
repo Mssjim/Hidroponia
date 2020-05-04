@@ -82,13 +82,13 @@
 
             <Button
                 style="@style/Button"
-                android:id="@+id/btnComercio"
+                android:id="@+id/btnPublish"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:onClick="comercio"
-                tools:text="Horta / Negócio"/>
+                android:onClick="publish"
+                tools:text="@string/publish"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
