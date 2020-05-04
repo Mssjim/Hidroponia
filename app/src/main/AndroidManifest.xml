@@ -44,6 +44,10 @@
             android:label="Perfil"
             android:parentActivityName=".activities.Inicio"/>
         <activity
+            android:name=".activities.Publish"
+            android:label="@string/publish"
+            android:parentActivityName=".activities.Inicio"/>
+        <activity
             android:name=".activities.Join"
             android:parentActivityName=".activities.Inicio"/>
         <activity

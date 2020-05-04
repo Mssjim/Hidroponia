@@ -59,7 +59,7 @@ public class Inicio extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_inicio);
 
-        btnPublish = findViewById(R.id.btnPublish);
+        btnPublish = findViewById(R.id.btPublish);
         tvUsername = findViewById(R.id.tvUsername);
         tvRole = findViewById(R.id.tvRole);
         ivImage = findViewById(R.id.ivImage);
@@ -235,6 +235,8 @@ public class Inicio extends Activity {
             startActivity(intent);
         } else {
             // TODO Iniciar novo post
+            Intent intent = new Intent(Inicio.this, Publish.class);
+            startActivity(intent);
         }
     }
 }

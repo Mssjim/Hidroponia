@@ -32,6 +32,7 @@
 
     <string name="send">Enviar</string>
     <string name="et_msg">Digite a mensagem...</string>
+    <string name="et_publish">Compartilhe algo...</string>
 
     <string name="checkUpdates">Buscando atualizações...</string>
     <string name="newUpdate">Nova atualização encontrada!</string>

@@ -82,7 +82,7 @@
 
             <Button
                 style="@style/Button"
-                android:id="@+id/btnPublish"
+                android:id="@+id/btPublish"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
