@@ -99,4 +99,6 @@
     <string name="changePasswordSuccess">Senha alterada com sucesso!</string>
     <string name="deleteAccount">Excluir Conta</string>
     <string name="deleteAccountConfirm">Tem certeza que deseja excluir a conta?\nEssa ação é irreversível!</string>
+
+    <string name="publishSuccess">Publicado com sucesso!</string>
 </resources>

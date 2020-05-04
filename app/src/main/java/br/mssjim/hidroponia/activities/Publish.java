@@ -87,29 +87,49 @@ public class Publish extends Activity {
 
         publishId = time + user.getUserId();
 
-        Log.i("AppLog", "Fazendo upload de imagem...");
-        // TODO Animação durante upload;
-        final StorageReference ref = FirebaseStorage.getInstance().getReference("/publish-images/" + publishId);
-        ref.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
-                                FirebaseFirestore.getInstance().collection("publish")
-                                        .document(publishId).set(new Post(user, text, uri.toString(), time))
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(getApplicationContext(), getString(R.string.changeImageSuccess), Toast.LENGTH_SHORT).show();
-                                                Log.i("AppLog", getString(R.string.changeImageSuccess));
-                                            }
-                                        });
-                            }
-                        });
-                    }
-                });
+        if(imageUri != null) {
+            Log.i("AppLog", "Fazendo upload de imagem...");
+            // TODO Animação durante upload;
+            final StorageReference ref = FirebaseStorage.getInstance().getReference("/publish-images/" + publishId);
+            ref.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
+                                    FirebaseFirestore.getInstance().collection("publish")
+                                            .document(publishId).set(new Post(user, text, uri.toString(), time))
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(getApplicationContext(), getString(R.string.publishSuccess), Toast.LENGTH_SHORT).show();
+                                                    Log.i("AppLog", getString(R.string.publishSuccess));
+
+                                                    Intent intent = new Intent(Publish.this, Inicio.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                    });
+        } else {
+            FirebaseFirestore.getInstance().collection("publish")
+                    .document(publishId).set(new Post(user, text, null, time))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.publishSuccess), Toast.LENGTH_SHORT).show();
+                            Log.i("AppLog", getString(R.string.publishSuccess));
+
+                            Intent intent = new Intent(Publish.this, Inicio.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    });
+        }
     }
 }
