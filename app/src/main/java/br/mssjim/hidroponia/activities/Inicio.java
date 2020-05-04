@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,12 +32,18 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.Item;
+import com.xwray.groupie.ViewHolder;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import br.mssjim.hidroponia.Dados;
 import br.mssjim.hidroponia.Hidroponia;
+import br.mssjim.hidroponia.Post;
 import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.Roles;
 import br.mssjim.hidroponia.Status;
@@ -194,7 +201,35 @@ public class Inicio extends Activity {
     }
 
     public void loadCards() {
+        Log.i("AppLog", "Carregando publicações...");
         // TODO alimentar recycle view
+        FirebaseFirestore.getInstance().collection("/publish").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot doc : docs) {
+                            final Post post = doc.toObject(Post.class);
+                            // TODO Carregar Posts separadamente
+                            // TODO Definir limite de carregamento
+                            int delay = 0;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() { // Handler pra não travar tudo
+                                    adapter.add(new Inicio.CardItem(post));
+                                }
+                            }, delay);
+                        }
+                        Log.i("AppLog", "Todas as publicações foram carregadas!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                        // TODO Catch Block
+                    }
+                });
     }
 
     @Override
@@ -237,6 +272,35 @@ public class Inicio extends Activity {
             // TODO Iniciar novo post
             Intent intent = new Intent(Inicio.this, Publish.class);
             startActivity(intent);
+        }
+    }
+
+    private class CardItem extends Item<ViewHolder> {
+        private final Post post;
+
+        private CardItem(Post post) {
+            this.post = post;
+        }
+
+        @Override
+        public void bind(@NonNull ViewHolder viewHolder, int position) {
+            ImageView ivUser = viewHolder.itemView.findViewById(R.id.ivUser);
+            TextView tvUsername = viewHolder.itemView.findViewById(R.id.tvUsername);
+            TextView tvTime = viewHolder.itemView.findViewById(R.id.tvTime);
+            TextView tvText = viewHolder.itemView.findViewById(R.id.tvText);
+            ImageView ivImage = viewHolder.itemView.findViewById(R.id.ivImage);
+
+            Picasso.get().load(post.getUser().getProfileImage()).placeholder(R.drawable.default_profile).into(ivUser);
+            tvUsername.setText(post.getUser().getUsername());
+            tvTime.setText(new SimpleDateFormat("dd/mm - hh:mm").format(new Date(post.getTime())));
+            tvText.setText(post.getText());
+            // TODO Definir placeholder
+            Picasso.get().load(user.getProfileImage()).into(ivImage);
+        }
+
+        @Override
+        public int getLayout() {
+            return R.layout.item_card;
         }
     }
 }

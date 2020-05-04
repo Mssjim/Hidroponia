@@ -77,6 +77,14 @@ public class Publish extends Activity {
         final User user = Hidroponia.getUser();
         final long time = System.currentTimeMillis();
         final String text = etPublish.getText().toString().trim();
+
+        if(text.isEmpty()) {
+            Toast.makeText(getApplicationContext(), getString(R.string.emptyField), Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            etPublish.setText(null);
+        }
+
         publishId = time + user.getUserId();
 
         Log.i("AppLog", "Fazendo upload de imagem...");
