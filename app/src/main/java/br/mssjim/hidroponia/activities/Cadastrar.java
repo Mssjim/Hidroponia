@@ -84,7 +84,7 @@ public class Cadastrar extends Activity {
         startActivityForResult(intent, 0);
     }
 
-    public void cadastrar(View v) {
+    public void cadastrar(final View v) {
         final String username = etUser.getText().toString();
         final String email = etEmail.getText().toString();
         final String password = etPassword.getText().toString();
@@ -128,9 +128,10 @@ public class Cadastrar extends Activity {
             return;
         }
 
+        v.setEnabled(false); // Bloqueia futuros pedidos de cadastro
+
         Log.i("AppLog", "Cadastrando usuário...");
-        // TODO Não permitir novas instâncias
-        // TODO Progress Dialog
+        // TODO Progress Dialog / Ou feedback de cadastramento
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -158,26 +159,6 @@ public class Cadastrar extends Activity {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
                                                         Log.i("AppLog", "Adicionado ao Firestore com sucesso!");
-                                                        // TODO Ações de usuário novo
-                                                        new AlertDialog.Builder(Cadastrar.this)
-                                                                .setTitle("")
-                                                                .setMessage("")
-                                                                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                                        // TODO Positive Action
-                                                                    }
-                                                                })
-                                                                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                                        // TODO Negative Action
-                                                                    }
-                                                                })
-                                                                .setIcon(getDrawable(R.mipmap.ic_launcher_round))
-                                                                .show();
-
-                                                        // TODO Só Iniciar intent após sair do AlertDialog (se bugar)
                                                         Intent intent = new Intent(Cadastrar.this, Inicio.class);
                                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
@@ -189,6 +170,7 @@ public class Cadastrar extends Activity {
                                                         Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
                                                         Toast.makeText(Cadastrar.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                                         // TODO Catch Block
+                                                        v.setEnabled(true);
                                                     }
                                                 });
                                     }
@@ -201,6 +183,7 @@ public class Cadastrar extends Activity {
                                 Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
                                 Toast.makeText(Cadastrar.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 // TODO Catch Block
+                                v.setEnabled(true);
                             }
                         });
                     }
@@ -212,6 +195,7 @@ public class Cadastrar extends Activity {
                     Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
                     Toast.makeText(Cadastrar.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     // TODO Catch Block
+                    v.setEnabled(true);
                 }
             });
     }
