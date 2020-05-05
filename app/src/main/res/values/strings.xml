@@ -18,6 +18,7 @@
     <string name="unconfirmedPassword">É necessário confirmar a sua Senha!</string>
     <string name="invalidEmail">Endereço de E-mail inválido!</string>
     <string name="unmatchedPassword">As senhas não coincidem!</string>
+    <string name="invalidPasswordLength">A senha precisa ter no mínimo 6 caracteres!</string>
 
     <string name="cb_termos">Aceito e concordo com os</string>
     <string name="cb_termos2">Termos de Uso</string>

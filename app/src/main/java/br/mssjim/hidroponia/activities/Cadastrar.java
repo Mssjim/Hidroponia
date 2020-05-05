@@ -94,36 +94,39 @@ public class Cadastrar extends Activity {
 
         if(username.isEmpty()) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, getString(R.string.emptyUsername), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            etUser.setError(getString(R.string.emptyUsername));
             return;
         }
         if(email.isEmpty()) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, getString(R.string.emptyEmail), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            etEmail.setError(getString(R.string.emptyEmail));
             return;
         }
         if(password.isEmpty()) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, getString(R.string.emptyPassword), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            etPassword.setError(getString(R.string.emptyPassword));
+            return;
+        }
+        if(password.length() < 6) {
+            // TODO Animação de campo inválido
+            etPassword.setError(getString(R.string.invalidPasswordLength));
             return;
         }
         if(passwordConfirm.isEmpty()) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, getString(R.string.unconfirmedPassword), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            etPasswordConfirm.setError(getString(R.string.unconfirmedPassword));
             return;
         }
-        if(!email.contains("@")) { // TODO Melhorar verificação de e-mail
+        if(!email.contains("@")) { // TODO Melhorar verificação de e-mail (La no catch)
             // TODO Animação de campo inválido
-            Toast.makeText(this, getString(R.string.invalidEmail), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            etEmail.setError(getString(R.string.invalidEmail));
             return;
         }
         if(!passwordConfirm.equals(password)) {
             // TODO Animação de campo inválido
-            Toast.makeText(this, getString(R.string.unmatchedPassword), Toast.LENGTH_SHORT).show(); // TODO Exibir erro no campo
+            etPasswordConfirm.setError(getString(R.string.unmatchedPassword));
             return;
         }
-
-        // TODO Exigir senha > 6 caracteres
 
         Log.i("AppLog", "Cadastrando usuário...");
         // TODO Não permitir novas instâncias
