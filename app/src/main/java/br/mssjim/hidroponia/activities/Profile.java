@@ -89,9 +89,7 @@ public class Profile extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        user = Hidroponia.getUser();
-        roles = Hidroponia.getRoles();
-        dados = Hidroponia.getDados();
+        updateDados();
 
         ivImage = findViewById(R.id.ivImage);
         tvUsername = findViewById(R.id.tvUsername);
@@ -144,8 +142,15 @@ public class Profile extends Activity {
                 LinearLayout.LayoutParams.MATCH_PARENT);
     }
 
+    public void updateDados() {
+        user = Hidroponia.getUser();
+        roles = Hidroponia.getRoles();
+        dados = Hidroponia.getDados();
+    }
+
     public void createAlertDialog(String s, View view, View view2, DialogInterface.OnClickListener listener) {
-        // TODO Atualizar 'user', 'roles' e 'dados' para não exibir valores antigos
+        updateDados();
+
         alertDialog = null;
         TextView title = new TextView(this);
         title.setText(s);
