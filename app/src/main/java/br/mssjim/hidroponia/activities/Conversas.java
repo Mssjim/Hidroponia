@@ -139,7 +139,7 @@ public class Conversas extends Activity {
 
             tvUsername.setText(lastMessage.getUsername());
             tvMsg.setText(lastMessage.getMessage().getText());
-            Picasso.get().load(lastMessage.getProfileImage()).into(ivImage);
+            Picasso.get().load(lastMessage.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
         }
 
         @Override

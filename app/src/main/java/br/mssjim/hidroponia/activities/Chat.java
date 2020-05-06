@@ -206,9 +206,9 @@ public class Chat extends Activity {
 
             tvMsg.setText(message.getText());
             if(message.getUserSendId().equals(userSend.getUserId())) {
-                Picasso.get().load(userSend.getProfileImage()).into(ivImage);
+                Picasso.get().load(userSend.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
             } else {
-                Picasso.get().load(user.getProfileImage()).into(ivImage);
+                Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
             }
         }
 
