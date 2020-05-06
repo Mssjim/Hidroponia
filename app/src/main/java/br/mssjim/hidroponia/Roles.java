@@ -1,8 +1,5 @@
 package br.mssjim.hidroponia;
 
-import android.app.Activity;
-import android.content.res.Resources;
-
 public class Roles {
     private boolean farm;
     private boolean sale;
@@ -75,10 +72,6 @@ public class Roles {
     }
 
     public boolean isVisitor() {
-        if(this.farm || this.sale || this.organic || this.store || this.staff) {
-            return false;
-        } else {
-            return true;
-        }
+        return !this.farm && !this.sale && !this.organic && !this.store && !this.staff;
     }
 }
