@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -34,7 +35,6 @@ import br.mssjim.hidroponia.LastMessage;
 import br.mssjim.hidroponia.Message;
 import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.User;
-import br.mssjim.hidroponia.utils.Url;
 
 public class GroupChat extends Activity {
 
@@ -162,7 +162,7 @@ public class GroupChat extends Activity {
         @Override
         public void bind(@NonNull ViewHolder viewHolder, int position) {
             TextView tvMsg = viewHolder.itemView.findViewById(R.id.tvMsg);
-            ImageView ivImage = viewHolder.itemView.findViewById(R.id.ivImage);
+            final ImageView ivImage = viewHolder.itemView.findViewById(R.id.ivImage);
 
             // TODO Exibir horário nas mensagens
 
@@ -170,8 +170,22 @@ public class GroupChat extends Activity {
             if(message.getUserSendId().equals(userSend.getUserId())) {
                 Picasso.get().load(userSend.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
             } else {
-                Picasso.get().load(Url.getGroupImage).into(ivImage);
-                // TODO Carregar imagem do usuário que enviou a mensagem
+                FirebaseFirestore.getInstance().collection("users")
+                        .document(message.getUserSendId()).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                String image = documentSnapshot.getString("profileImage");
+                                Picasso.get().load(image).placeholder(R.drawable.default_profile).into(ivImage);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // TODO Testar se a imagem padrao sera carregada caso o usuario n exista mais
+                                Picasso.get().load(R.drawable.default_profile).into(ivImage);
+                            }
+                        });
             }
         }
 

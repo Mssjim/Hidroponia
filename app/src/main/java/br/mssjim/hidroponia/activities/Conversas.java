@@ -16,7 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,7 +34,6 @@ import java.util.List;
 import br.mssjim.hidroponia.Hidroponia;
 import br.mssjim.hidroponia.LastMessage;
 import br.mssjim.hidroponia.R;
-import br.mssjim.hidroponia.utils.Url;
 
 public class Conversas extends Activity {
 
@@ -52,8 +53,17 @@ public class Conversas extends Activity {
         ivImageGroup = findViewById(R.id.ivImageGroup);
         tvMsgGroup = findViewById(R.id.tvMsgGroup);
 
-        Picasso.get().load(Url.getGroupImage).into(ivImageGroup);
-        // TODO Carregar o nome do grupo dinamicamente
+        Picasso.get().load(R.drawable.logo).into(ivImageGroup);
+        FirebaseFirestore.getInstance().collection("groups")
+                .document("hidroponia").collection("data")
+                .document("last-message").get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        LastMessage lastMessage = documentSnapshot.toObject(LastMessage.class);
+                        tvMsgGroup.setText(lastMessage.getMessage().getText());
+                    }
+                });
         // TODO Obter ultima mensagem do grupo
 
         adapter = new GroupAdapter();
@@ -67,17 +77,14 @@ public class Conversas extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO Atualizar conversas
     }
 
     public void loadLastMessages() {
         Log.i("AppLog", "Carregando conversas...");
-        // TODO Carregamento de mensagens
         int delay = 0;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() { // Handler pra não travar tudo
-                // TODO Se bugar: [if(userSend != null]
                 FirebaseFirestore.getInstance().collection("/data")
                         .document(Hidroponia.getUser().getUserId()).collection("last-messages")
                         .orderBy("message.time", Query.Direction.DESCENDING)
