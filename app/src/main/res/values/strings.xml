@@ -102,4 +102,5 @@
     <string name="deleteAccountConfirm">Tem certeza que deseja excluir a conta?\nEssa ação é irreversível!</string>
 
     <string name="publishSuccess">Publicado com sucesso!</string>
+    <string name="deletedUser">Usuário deletado</string>
 </resources>

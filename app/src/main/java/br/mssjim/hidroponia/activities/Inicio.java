@@ -274,14 +274,31 @@ public class Inicio extends Activity {
 
         @Override
         public void bind(@NonNull ViewHolder viewHolder, int position) {
-            ImageView ivUser = viewHolder.itemView.findViewById(R.id.ivUser);
-            TextView tvUsername = viewHolder.itemView.findViewById(R.id.tvUsername);
+            final ImageView ivUser = viewHolder.itemView.findViewById(R.id.ivUser);
+            final TextView tvUsername = viewHolder.itemView.findViewById(R.id.tvUsername);
             TextView tvTime = viewHolder.itemView.findViewById(R.id.tvTime);
             TextView tvText = viewHolder.itemView.findViewById(R.id.tvText);
             ImageView ivImage = viewHolder.itemView.findViewById(R.id.ivImage);
 
-            Picasso.get().load(post.getUser().getProfileImage()).placeholder(R.drawable.default_profile).into(ivUser);
-            tvUsername.setText(post.getUser().getUsername());
+            FirebaseFirestore.getInstance().collection("users")
+                    .document(post.getUserId()).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            String username = documentSnapshot.getString("username");
+                            String image = documentSnapshot.getString("profileImage");
+
+                            Picasso.get().load(image).placeholder(R.drawable.default_profile).into(ivUser);
+                            tvUsername.setText(username);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Picasso.get().load(R.drawable.default_profile).into(ivUser);
+                            tvUsername.setText(getString(R.string.deletedUser));
+                        }
+                    });
             tvTime.setText(new SimpleDateFormat("dd/mm - hh:mm").format(new Date(post.getTime())));
             tvText.setText(post.getText());
             // TODO Definir placeholder

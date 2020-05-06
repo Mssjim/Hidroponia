@@ -100,7 +100,7 @@ public class Publish extends Activity {
                                 public void onSuccess(Uri uri) {
                                     Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
                                     FirebaseFirestore.getInstance().collection("publish")
-                                            .document(publishId).set(new Post(user, text, uri.toString(), time))
+                                            .document(publishId).set(new Post(user.getUserId(), text, uri.toString(), time))
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
@@ -118,7 +118,7 @@ public class Publish extends Activity {
                     });
         } else {
             FirebaseFirestore.getInstance().collection("publish")
-                    .document(publishId).set(new Post(user, text, null, time))
+                    .document(publishId).set(new Post(user.getUserId(), text, null, time))
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {

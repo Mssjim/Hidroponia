@@ -1,16 +1,16 @@
 package br.mssjim.hidroponia;
 
 public class Post {
+    private String userId;
     private String text;
     private String image;
-    private User user;
     private long time;
 
     public Post() {
     }
 
-    public Post(User user, String text, String image, long time) {
-        this.user = user;
+    public Post(String userId, String text, String image, long time) {
+        this.userId = userId;
         this.text = text;
         this.image = image;
         this.time = time;
@@ -24,8 +24,8 @@ public class Post {
         return image;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
     public long getTime() {
