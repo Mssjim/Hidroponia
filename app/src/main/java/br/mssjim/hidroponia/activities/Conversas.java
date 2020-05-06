@@ -80,7 +80,7 @@ public class Conversas extends Activity {
                 // TODO Se bugar: [if(userSend != null]
                 FirebaseFirestore.getInstance().collection("/data")
                         .document(Hidroponia.getUser().getUserId()).collection("last-messages")
-                        .orderBy("message", Query.Direction.DESCENDING) // TODO Ordenar conversas
+                        .orderBy("message.time", Query.Direction.DESCENDING)
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
