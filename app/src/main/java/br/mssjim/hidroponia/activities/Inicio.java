@@ -290,13 +290,10 @@ public class Inicio extends Activity {
 
                             Picasso.get().load(image).placeholder(R.drawable.default_profile).into(ivUser);
                             tvUsername.setText(username);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Picasso.get().load(R.drawable.default_profile).into(ivUser);
-                            tvUsername.setText(getString(R.string.deletedUser));
+
+                            if(username.isEmpty()) {
+                                tvUsername.setText(getString(R.string.deletedUser));
+                            }
                         }
                     });
             tvTime.setText(new SimpleDateFormat("dd/mm - hh:mm").format(new Date(post.getTime())));
