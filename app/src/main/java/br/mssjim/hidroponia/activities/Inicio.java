@@ -73,8 +73,6 @@ public class Inicio extends Activity {
         ivImage = findViewById(R.id.ivImage);
         rv = findViewById(R.id.rv);
 
-        // TODO Definir 'btComercio' dinamicamente
-
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);

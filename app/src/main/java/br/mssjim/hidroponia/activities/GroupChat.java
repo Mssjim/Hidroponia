@@ -125,7 +125,7 @@ public class GroupChat extends Activity {
                     public void onSuccess(Void aVoid) {
                         Log.i("AppLog", "Mensagem adicionada com sucesso!");
 
-                        LastMessage lastMessage = new LastMessage(userSend, message);
+                        LastMessage lastMessage = new LastMessage(message, userSend.getUsername(), userSend.getProfileImage());
                         Log.i("AppLog", "Adicionando mensagem rápida ao Firestore...");
                         FirebaseFirestore.getInstance().collection("/groups")
                                 .document("hidroponia").collection("data")

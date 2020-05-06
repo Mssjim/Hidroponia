@@ -137,9 +137,9 @@ public class Conversas extends Activity {
             TextView tvUsername = viewHolder.itemView.findViewById(R.id.tvUsername);
             TextView tvMsg = viewHolder.itemView.findViewById(R.id.tvMsg);
 
-            tvUsername.setText(lastMessage.getUser().getUsername());
+            tvUsername.setText(lastMessage.getUsername());
             tvMsg.setText(lastMessage.getMessage().getText());
-            Picasso.get().load(lastMessage.getUser().getProfileImage()).into(ivImage);
+            Picasso.get().load(lastMessage.getProfileImage()).into(ivImage);
         }
 
         @Override

@@ -125,7 +125,7 @@ public class Chat extends Activity {
                     public void onSuccess(Void aVoid) {
                         Log.i("AppLog", "1/2 - Mensagem adicionada com sucesso!");
 
-                        LastMessage lastMessage = new LastMessage(user, message);
+                        LastMessage lastMessage = new LastMessage(message, user.getUsername(), user.getProfileImage());
                         Log.i("AppLog", "1/2 - Adicionando mensagem rápida ao Firestore...");
                         FirebaseFirestore.getInstance().collection("/data")
                                 .document(userSend.getUserId()).collection("last-messages")
@@ -161,7 +161,7 @@ public class Chat extends Activity {
                     public void onSuccess(Void aVoid) {
                         Log.i("AppLog", "2/2 - Mensagem adicionada com sucesso!");
 
-                        LastMessage lastMessage = new LastMessage(userSend, message);
+                        LastMessage lastMessage = new LastMessage(message, user.getUsername(), user.getProfileImage());
                         Log.i("AppLog", "2/2 - Adicionando mensagem rápida ao Firestore...");
                         FirebaseFirestore.getInstance().collection("/data")
                                 .document(user.getUserId()).collection("last-messages")

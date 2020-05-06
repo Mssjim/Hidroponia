@@ -1,32 +1,28 @@
 package br.mssjim.hidroponia;
 
 public class LastMessage {
-    // TODO Armazenar apenas o ID do usuário, não o objeto completo
-
-    private User user;
     private Message message;
+    private String username;
+    private String profileImage;
 
     public LastMessage() {
     }
 
-    public LastMessage(User user, Message message) {
-        this.user = user;
+    public LastMessage(Message message, String username, String profileImage) {
+        this.username = username;
+        this.profileImage = profileImage;
         this.message = message;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Message getMessage() {
         return message;
     }
 
-    public void setMessage(Message message) {
-        this.message = message;
+    public String getUsername() {
+        return username;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
     }
 }
