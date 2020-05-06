@@ -37,23 +37,21 @@ public class Login extends Activity {
         tvCadastrar = findViewById(R.id.tvCadastrar);
     }
 
-    public void login(View v) {
+    public void login(final View v) {
         final String email = etEmail.getText().toString();
         final String password = etPassword.getText().toString();
 
         if(email.isEmpty()) {
-            // TODO Animação de campo inválido
-            Toast.makeText(this, "É necessário informar um endereço de E-mail!", Toast.LENGTH_SHORT).show();
+            etEmail.setError(getString(R.string.emptyEmail));
             return;
         }
         if(password.isEmpty()) {
-            // TODO Animação de campo inválido
-            Toast.makeText(this, "É necessário informar uma Senha!", Toast.LENGTH_SHORT).show();
+            etPassword.setError(getString(R.string.emptyPassword));
             return;
         }
 
+        v.setEnabled(false);
         Log.i("AppLog", "Autenticando usuário...");
-        // TODO Não permitir novas instâncias
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
@@ -69,7 +67,8 @@ public class Login extends Activity {
                     public void onFailure(@NonNull Exception e) {
                         Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
                         Toast.makeText(Login.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        // TODO Catch Block
+                        // TODO Catch Block (Email/Senha invalidos)
+                        v.setEnabled(true);
                     }
                 });
     }
