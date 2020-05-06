@@ -38,6 +38,7 @@ import br.mssjim.hidroponia.User;
 public class Chat extends Activity {
 
     private GroupAdapter adapter;
+    private RecyclerView rv;
     private EditText etMsg;
     private User user;
     private User userSend;
@@ -54,7 +55,7 @@ public class Chat extends Activity {
         getActionBar().setTitle(user.getUsername());
 
         adapter = new GroupAdapter();
-        RecyclerView rv = findViewById(R.id.rv);
+        rv = findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
@@ -90,6 +91,7 @@ public class Chat extends Activity {
                                         if(doc.getType() == DocumentChange.Type.ADDED) {
                                             Message message = doc.getDocument().toObject(Message.class);
                                             adapter.add(new MessageItem(message));
+                                            rv.scrollToPosition(docs.size());
                                             // TODO Agrupar mensagens do mesmo usuário
                                         }
                                     }
