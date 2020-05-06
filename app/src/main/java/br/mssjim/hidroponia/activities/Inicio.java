@@ -301,9 +301,8 @@ public class Inicio extends Activity {
                     });
             tvTime.setText(new SimpleDateFormat("dd/mm - hh:mm").format(new Date(post.getTime())));
             tvText.setText(post.getText());
-            // TODO Definir placeholder
             if(post.getImage() != null)
-                Picasso.get().load(post.getImage()).into(ivImage);
+                Picasso.get().load(post.getImage()).placeholder(R.drawable.default_image).into(ivImage);
         }
 
         @Override
