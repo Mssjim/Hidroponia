@@ -1,46 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
     tools:context=".activities.Publish">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp">
         <ImageView
             android:id="@+id/ivPublish"
             android:background="@color/colorBackgroundDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="200dp"
-            android:onClick="image"/>
+            android:onClick="image"
+            android:src="@drawable/add_image"/>
         <EditText
             style="@style/EditText"
             android:id="@+id/etPublish"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:inputType="textCapSentences|textMultiLine"
-            android:minHeight="120dp"
             android:gravity="start"
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
             android:hint="@string/et_publish"/>
-
-        <Button
-            style="@style/Button"
-            android:id="@+id/btSend"
-            android:drawableEnd="@drawable/ic_send"
-            android:drawablePadding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_gravity="end"
-            android:layout_marginRight="10dp"
-            android:paddingStart="30dp"
-            android:paddingEnd="20dp"
-            android:text="@string/send"
-            android:onClick="enviar"/>
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>
