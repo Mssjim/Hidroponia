@@ -43,6 +43,8 @@ public class Chat extends Activity {
     private User user;
     private User userSend;
 
+    private String previousMessageUserId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,8 +93,7 @@ public class Chat extends Activity {
                                         if(doc.getType() == DocumentChange.Type.ADDED) {
                                             Message message = doc.getDocument().toObject(Message.class);
                                             adapter.add(new MessageItem(message));
-                                            rv.scrollToPosition(docs.size());
-                                            // TODO Agrupar mensagens do mesmo usuário
+                                            // TODO Rolar RecycleView para o fim
                                         }
                                     }
                                 }
@@ -202,8 +203,14 @@ public class Chat extends Activity {
         public void bind(@NonNull ViewHolder viewHolder, int position) {
             TextView tvMsg = viewHolder.itemView.findViewById(R.id.tvMsg);
             ImageView ivImage = viewHolder.itemView.findViewById(R.id.ivImage);
+            View space = viewHolder.itemView.findViewById(R.id.space);
 
             // TODO Exibir horário nas mensagens
+
+            if(message.getUserSendId().equals(previousMessageUserId)) {
+                ivImage.setVisibility(View.GONE);
+                space.setVisibility(View.VISIBLE);
+            }
 
             tvMsg.setText(message.getText());
             if(message.getUserSendId().equals(userSend.getUserId())) {
@@ -211,6 +218,7 @@ public class Chat extends Activity {
             } else {
                 Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
             }
+            previousMessageUserId = message.getUserSendId();
         }
 
         @Override
