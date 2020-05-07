@@ -56,9 +56,11 @@ public class Chat extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setTitle(user.getUsername());
 
+        LinearLayoutManager layout = new LinearLayoutManager(this);
+        layout.setStackFromEnd(true);
         adapter = new GroupAdapter();
         rv = findViewById(R.id.rv);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setLayoutManager(layout);
         rv.setAdapter(adapter);
 
         loadMessages();
