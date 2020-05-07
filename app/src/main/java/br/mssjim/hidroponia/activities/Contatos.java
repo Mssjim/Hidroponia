@@ -27,6 +27,7 @@ import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
 
+import br.mssjim.hidroponia.Hidroponia;
 import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.Status;
 import br.mssjim.hidroponia.User;
@@ -79,8 +80,8 @@ public class Contatos extends Activity {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() { // Handler pra não travar tudo
-                                    // TODO Ocultar usuário logado
-                                    adapter.add(new UserItem(user));
+                                    if(!user.getUserId().equals(Hidroponia.getUser().getUserId()))
+                                        adapter.add(new UserItem(user));
                                 }
                             }, delay);
                         }
