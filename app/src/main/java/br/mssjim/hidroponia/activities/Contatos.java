@@ -64,13 +64,7 @@ public class Contatos extends Activity {
                 startActivity(intent);
             }
         });
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // TODO Recarregar contatos != Adicionar mais contatos
         // TODO Separar contatos Onlines e Offlines
         Log.i("AppLog", "Carregando lista de contatos...");
         FirebaseFirestore.getInstance().collection("/users").orderBy("username").get()
@@ -93,13 +87,13 @@ public class Contatos extends Activity {
                         Log.i("AppLog", "Todos os contatos foram carregados!");
                     }
                 })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                // TODO Catch Block
-            }
-        });
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                        // TODO Catch Block
+                    }
+                });
     }
 
     private class UserItem extends Item<ViewHolder> {
