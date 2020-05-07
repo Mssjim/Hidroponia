@@ -13,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="200dp"
+            android:maxHeight="300dp"
             android:onClick="image"
             android:src="@drawable/add_image"/>
         <EditText

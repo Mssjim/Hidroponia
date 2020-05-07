@@ -54,9 +54,8 @@
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:maxHeight="480dp"
+        android:maxHeight="600dp"
         tools:src="@tools:sample/backgrounds/scenic" />
 
 </LinearLayout>
