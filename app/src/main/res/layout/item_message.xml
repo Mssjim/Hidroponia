@@ -4,12 +4,14 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp">
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivImage"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_marginTop="5dp"
         tools:src="@tools:sample/avatars"/>
 
     <View
@@ -23,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="left"
+        android:layout_gravity="bottom"
         android:layout_marginLeft="10dp">
         <TextView
             style="@style/Message"
