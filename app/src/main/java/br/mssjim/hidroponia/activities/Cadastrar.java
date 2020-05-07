@@ -91,37 +91,30 @@ public class Cadastrar extends Activity {
         // TODO Solicitar uma imagem de perfil OU adicionar imagem padrão
 
         if(username.isEmpty()) {
-            // TODO Animação de campo inválido
             etUser.setError(getString(R.string.emptyUsername));
             return;
         }
         if(email.isEmpty()) {
-            // TODO Animação de campo inválido
             etEmail.setError(getString(R.string.emptyEmail));
             return;
         }
+        if(!email.contains("@")) {
+            etEmail.setError(getString(R.string.invalidEmail));
+            return;
+        }
         if(password.isEmpty()) {
-            // TODO Animação de campo inválido
             etPassword.setError(getString(R.string.emptyPassword));
             return;
         }
         if(password.length() < 6) {
-            // TODO Animação de campo inválido
             etPassword.setError(getString(R.string.invalidPasswordLength));
             return;
         }
         if(passwordConfirm.isEmpty()) {
-            // TODO Animação de campo inválido
             etPasswordConfirm.setError(getString(R.string.unconfirmedPassword));
             return;
         }
-        if(!email.contains("@")) { // TODO Melhorar verificação de e-mail (La no catch)
-            // TODO Animação de campo inválido
-            etEmail.setError(getString(R.string.invalidEmail));
-            return;
-        }
         if(!passwordConfirm.equals(password)) {
-            // TODO Animação de campo inválido
             etPasswordConfirm.setError(getString(R.string.unmatchedPassword));
             return;
         }

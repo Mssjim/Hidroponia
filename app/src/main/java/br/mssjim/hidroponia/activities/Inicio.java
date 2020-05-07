@@ -73,7 +73,7 @@ public class Inicio extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO Atualizar cards
+        loadCards();
     }
 
     public void verifyLogin() {
@@ -86,7 +86,7 @@ public class Inicio extends Activity {
             Intent intent = new Intent(Inicio.this, Login.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            System.exit(0); // TODO Arrumar isso pq ainda não entendi pq não bugou
+            // System.exit(0); // TODO Apagar se nao bugar
             return;
         }
 
@@ -113,7 +113,7 @@ public class Inicio extends Activity {
                         Intent intent = new Intent(Inicio.this, Login.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        System.exit(0); // TODO Arrumar isso pq ainda não entendi pq não bugou
+                        // System.exit(0); // TODO Apagar se nao bugar
                         // TODO Catch Block
                         return;
                     }
@@ -158,8 +158,6 @@ public class Inicio extends Activity {
                                                     Hidroponia.setDados(dados);
 
                                                     Log.i("AppLog", "Dados obtidos com sucesso!");
-
-                                                    loadCards();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -190,6 +188,7 @@ public class Inicio extends Activity {
     }
 
     public void loadCards() {
+        adapter.clear();
         Log.i("AppLog", "Carregando publicações...");
         // TODO alimentar recycle view
         FirebaseFirestore.getInstance().collection("/publish")
@@ -236,8 +235,8 @@ public class Inicio extends Activity {
                 startActivity(intent);
                 break;
             case R.id.logout:
-                FirebaseAuth.getInstance().signOut();
                 Hidroponia.setStatus("Offline"); // TODO Refatorar status
+                FirebaseAuth.getInstance().signOut();
                 verifyLogin();
                 break;
         }

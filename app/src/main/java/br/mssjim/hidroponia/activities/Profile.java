@@ -489,7 +489,6 @@ public class Profile extends Activity {
                         Intent intent = new Intent(Profile.this, Login.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
-                        System.exit(0); // TODO Arrumar isso pq ainda não entendi pq não bugou 2
                     }
                 });
     }
