@@ -27,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
+import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
@@ -34,6 +35,7 @@ import java.util.List;
 import br.mssjim.hidroponia.Hidroponia;
 import br.mssjim.hidroponia.LastMessage;
 import br.mssjim.hidroponia.R;
+import br.mssjim.hidroponia.User;
 
 public class Conversas extends Activity {
 
@@ -70,6 +72,23 @@ public class Conversas extends Activity {
         rv = findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull Item item, @NonNull View view) {
+                Conversas.LastMessageItem messageItem = (Conversas.LastMessageItem) item;
+                FirebaseFirestore.getInstance().collection("users")
+                        .document(messageItem.lastMessage.getUserId()).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                Intent intent = new Intent(Conversas.this, Chat.class);
+                                intent.putExtra("user", documentSnapshot.toObject(User.class));
+                                startActivity(intent);
+                            }
+                        });
+            }
+        });
 
         loadLastMessages();
     }

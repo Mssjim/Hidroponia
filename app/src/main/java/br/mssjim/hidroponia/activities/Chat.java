@@ -112,7 +112,7 @@ public class Chat extends Activity {
 
         String text = etMsg.getText().toString();
         final String userSendId = userSend.getUserId();
-        String userId = user.getUserId();
+        final String userId = user.getUserId();
         long time = System.currentTimeMillis();
         etMsg.setText(null);
 
@@ -127,7 +127,7 @@ public class Chat extends Activity {
                     public void onSuccess(Void aVoid) {
                         Log.i("AppLog", "1/2 - Mensagem adicionada com sucesso!");
 
-                        LastMessage lastMessage = new LastMessage(message, user.getUsername(), user.getProfileImage());
+                        LastMessage lastMessage = new LastMessage(message, userId, user.getUsername(), user.getProfileImage());
                         Log.i("AppLog", "1/2 - Adicionando mensagem rápida ao Firestore...");
                         FirebaseFirestore.getInstance().collection("/data")
                                 .document(userSend.getUserId()).collection("last-messages")
@@ -163,7 +163,7 @@ public class Chat extends Activity {
                     public void onSuccess(Void aVoid) {
                         Log.i("AppLog", "2/2 - Mensagem adicionada com sucesso!");
 
-                        LastMessage lastMessage = new LastMessage(message, userSend.getUsername(), userSend.getProfileImage());
+                        LastMessage lastMessage = new LastMessage(message, userSendId, userSend.getUsername(), userSend.getProfileImage());
                         Log.i("AppLog", "2/2 - Adicionando mensagem rápida ao Firestore...");
                         FirebaseFirestore.getInstance().collection("/data")
                                 .document(user.getUserId()).collection("last-messages")
