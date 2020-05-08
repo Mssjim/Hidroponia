@@ -50,7 +50,6 @@ public class Inicio extends Activity {
     private TextView tvUsername;
     private TextView tvRole;
     private ImageView ivImage;
-    private RecyclerView rv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +60,7 @@ public class Inicio extends Activity {
         tvUsername = findViewById(R.id.tvUsername);
         tvRole = findViewById(R.id.tvRole);
         ivImage = findViewById(R.id.ivImage);
-        rv = findViewById(R.id.rv);
+        RecyclerView rv = findViewById(R.id.rv);
 
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
