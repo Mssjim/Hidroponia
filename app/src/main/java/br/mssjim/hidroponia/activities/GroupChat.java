@@ -37,9 +37,6 @@ import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.User;
 
 public class GroupChat extends Activity {
-
-    // TODO permitir outros grupos além do "Hidroponia"
-
     private GroupAdapter adapter;
     private EditText etMsg;
     private User userSend;
@@ -58,20 +55,13 @@ public class GroupChat extends Activity {
         RecyclerView rv = findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
-
-        loadMessages();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        // TODO Atualizar mensagens
-    }
-
-    public void loadMessages() {
+        adapter.clear();
         Log.i("AppLog", "Carregando mensagens...");
-        // TODO Carregamento de mensagens
         int delay = 0;
         new Handler().postDelayed(new Runnable() {
             @Override
