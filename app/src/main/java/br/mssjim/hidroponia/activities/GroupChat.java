@@ -41,6 +41,8 @@ public class GroupChat extends Activity {
     private EditText etMsg;
     private User userSend;
 
+    private String previousMessageUserId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +84,6 @@ public class GroupChat extends Activity {
                                         if(doc.getType() == DocumentChange.Type.ADDED) {
                                             Message message = doc.getDocument().toObject(Message.class);
                                             adapter.add(new MessageItem(message));
-                                            // TODO Agrupar mensagens do mesmo usuário
                                         }
                                     }
                                 }
@@ -154,8 +155,14 @@ public class GroupChat extends Activity {
         public void bind(@NonNull ViewHolder viewHolder, int position) {
             TextView tvMsg = viewHolder.itemView.findViewById(R.id.tvMsg);
             final ImageView ivImage = viewHolder.itemView.findViewById(R.id.ivImage);
+            View space = viewHolder.itemView.findViewById(R.id.space);
 
             // TODO Exibir horário nas mensagens
+
+            if(message.getUserSendId().equals(previousMessageUserId)) {
+                ivImage.setVisibility(View.GONE);
+                space.setVisibility(View.VISIBLE);
+            }
 
             tvMsg.setText(message.getText());
             if(message.getUserSendId().equals(userSend.getUserId())) {
@@ -178,6 +185,8 @@ public class GroupChat extends Activity {
                             }
                         });
             }
+
+            previousMessageUserId = message.getUserSendId();
         }
 
         @Override
