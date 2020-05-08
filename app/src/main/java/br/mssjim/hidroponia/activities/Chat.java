@@ -43,7 +43,7 @@ public class Chat extends Activity {
     private User user;
     private User userSend;
 
-    private String previousMessageUserId;
+    private Message lastMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +87,19 @@ public class Chat extends Activity {
                                         // Lista apenas as alterações
                                         if(doc.getType() == DocumentChange.Type.ADDED) {
                                             Message message = doc.getDocument().toObject(Message.class);
-                                            adapter.add(new MessageItem(message));
-                                            // TODO Rolar RecycleView para o fim
+                                            Message previousMessage = new Message("", "", "", 0);
+                                            if(doc.getNewIndex() > 0) {
+                                                try {
+                                                    previousMessage = docs.get(doc.getNewIndex() - 1)
+                                                            .getDocument().toObject(Message.class);
+                                                } catch (Exception error) {
+                                                    if(lastMessage != null) {
+                                                        previousMessage = lastMessage;
+                                                    }
+                                                }
+                                            }
+                                            lastMessage = message;
+                                            adapter.add(new MessageItem(message, previousMessage));
                                         }
                                     }
                                 }
@@ -189,9 +200,11 @@ public class Chat extends Activity {
     private class MessageItem extends Item<ViewHolder> {
 
         private final Message message;
+        private final Message previousMessage;
 
-        private MessageItem(Message message) {
+        private MessageItem(Message message, Message previousMessage) {
             this.message = message;
+            this.previousMessage = previousMessage;
         }
 
         @Override
@@ -202,9 +215,12 @@ public class Chat extends Activity {
 
             // TODO Exibir horário nas mensagens
 
-            if(message.getUserSendId().equals(previousMessageUserId)) {
+            if(message.getUserSendId().equals(previousMessage.getUserSendId())) {
                 ivImage.setVisibility(View.GONE);
                 space.setVisibility(View.VISIBLE);
+            } else {
+                ivImage.setVisibility(View.VISIBLE);
+                space.setVisibility(View.GONE);
             }
 
             tvMsg.setText(message.getText());
@@ -213,7 +229,6 @@ public class Chat extends Activity {
             } else {
                 Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
             }
-            previousMessageUserId = message.getUserSendId();
         }
 
         @Override

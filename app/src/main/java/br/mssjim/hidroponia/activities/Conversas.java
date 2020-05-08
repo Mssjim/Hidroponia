@@ -113,6 +113,8 @@ public class Conversas extends Activity {
                                         if(doc.getType() == DocumentChange.Type.ADDED) {
                                             LastMessage lastMessage = doc.getDocument().toObject(LastMessage.class);
                                             adapter.add(new LastMessageItem(lastMessage));
+                                            if(doc.getNewIndex() == docs.size() - 1)
+                                                Log.i("AppLog", "Todas as conversas foram carregadas!");
                                         }
                                     }
                                 }
@@ -120,7 +122,6 @@ public class Conversas extends Activity {
                         });
             }
         }, delay);
-        Log.i("AppLog", "Todas as conversas foram carregadas!");
     }
 
     public void groupChat(View view) {
