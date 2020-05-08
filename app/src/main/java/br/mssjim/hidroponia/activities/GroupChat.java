@@ -52,8 +52,10 @@ public class GroupChat extends Activity {
         getActionBar().setTitle(getResources().getString(R.string.app_name));
 
         adapter = new GroupAdapter();
+        LinearLayoutManager layout = new LinearLayoutManager(this);
+        layout.setStackFromEnd(true);
         RecyclerView rv = findViewById(R.id.rv);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setLayoutManager(layout);
         rv.setAdapter(adapter);
     }
 
@@ -66,7 +68,6 @@ public class GroupChat extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() { // Handler pra não travar tudo
-                // TODO Se bugar: [if(userSend != null)]
                 FirebaseFirestore.getInstance().collection("/groups").document("hidroponia")
                         .collection("messages")
                         .orderBy("time", Query.Direction.ASCENDING)
