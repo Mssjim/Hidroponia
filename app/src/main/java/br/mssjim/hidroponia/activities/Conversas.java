@@ -66,7 +66,6 @@ public class Conversas extends Activity {
                         tvMsgGroup.setText(lastMessage.getMessage().getText());
                     }
                 });
-        // TODO Obter ultima mensagem do grupo
 
         adapter = new GroupAdapter();
         rv = findViewById(R.id.rv);
@@ -89,16 +88,12 @@ public class Conversas extends Activity {
                         });
             }
         });
-
-        loadLastMessages();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    public void loadLastMessages() {
+        adapter.clear();
         Log.i("AppLog", "Carregando conversas...");
         int delay = 0;
         new Handler().postDelayed(new Runnable() {
