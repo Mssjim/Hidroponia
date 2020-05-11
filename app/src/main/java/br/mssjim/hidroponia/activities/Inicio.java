@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -83,29 +84,15 @@ public class Inicio extends Activity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             return;
-        }
-
-        Hidroponia.setStatus("Online"); // TODO Refatorar status
-
-        tvUsername.setText(user.getUsername());
-        tvUsername.setShadowLayer(10, 0, 0, Color.BLACK);
-        Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
-
-        tvRole.setText(roles.getRole());
-        tvRole.setShadowLayer(4, 0, 0, Color.BLACK);
-
-        // TODO Só exibir aqui 'btnComercio' (BtnPublish)
-        if (roles.isVisitor()) {
-            btnPublish.setText(getString(R.string.join));
         } else {
-            btnPublish.setText(getString(R.string.publish));
+            Hidroponia.setStatus("Online"); // TODO Refatorar status
+            fillViews();
+            loadCards();
+            updateDados();
         }
-
-        loadCards();
     }
 
     public void loadCards() {
-        adapter.clear();
         Log.i("AppLog", "Carregando publicações...");
         // TODO alimentar recycle view
         FirebaseFirestore.getInstance().collection("/publish")
@@ -113,6 +100,7 @@ public class Inicio extends Activity {
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        adapter.clear();
                         List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
                         for (DocumentSnapshot doc : docs) {
                             final Post post = doc.toObject(Post.class);
@@ -136,6 +124,64 @@ public class Inicio extends Activity {
                         // TODO Catch Block
                     }
                 });
+    }
+    public void updateDados() {
+        Log.i("AppLog", "Atualizando dados...");
+        final String id = user.getUserId();
+        FirebaseFirestore.getInstance().collection("/users").document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        user = documentSnapshot.toObject(User.class);
+                        Hidroponia.setUser(user);
+
+                        FirebaseFirestore.getInstance().collection("/data").document(id)
+                                .collection("data").document("roles").get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        roles = documentSnapshot.toObject(Roles.class);
+                                        if (roles == null) {
+                                            roles = new Roles();
+                                        }
+                                        Hidroponia.setRoles(roles);
+
+                                        FirebaseFirestore.getInstance().collection("/data")
+                                                .document(id).collection("data")
+                                                .document("dados").get()
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                        dados = documentSnapshot.toObject(Dados.class);
+                                                        if (dados == null) {
+                                                            dados = new Dados();
+                                                        }
+                                                        Hidroponia.setDados(dados);
+
+                                                        Log.i("AppLog", "Dados atualizados com sucesso!");
+                                                        fillViews();
+                                                    }
+                                                });
+                                    }
+                                });
+                    }
+                });
+    }
+
+    public void fillViews() {
+        tvUsername.setText(user.getUsername());
+        tvUsername.setShadowLayer(10, 0, 0, Color.BLACK);
+        Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
+
+        tvRole.setText(roles.getRole());
+        tvRole.setShadowLayer(4, 0, 0, Color.BLACK);
+
+        // TODO Só exibir aqui 'btnComercio' (BtnPublish)
+        if (roles.isVisitor()) {
+            btnPublish.setText(getString(R.string.join));
+        } else {
+            btnPublish.setText(getString(R.string.publish));
+        }
     }
 
     @Override
