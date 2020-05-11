@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Hidroponia extends Application implements Application.ActivityLifecycleCallbacks {
@@ -28,6 +29,41 @@ public class Hidroponia extends Application implements Application.ActivityLifec
         registerActivityLifecycleCallbacks(this); // TODO Talvez seja desnecessário
         context = this;
         super.onCreate();
+    }
+
+    public static boolean logout() {
+        Hidroponia.setStatus("Offline"); // TODO Refatorar status
+        setUser(null);
+        setRoles(null);
+        setDados(null);
+        FirebaseAuth.getInstance().signOut();
+
+        return true;
+    }
+
+    public static void setStatus(final String status) {
+        if(user != null) { // TODO Serve para quando a conta for excluida e ele voltar aki não bugar
+            Log.i("AppLog", "Atualizando status do usuário...");
+            FirebaseFirestore.getInstance().collection("/data")
+                    .document(user.getUserId()).collection("data")
+                    .document("status")
+                    .set(new Status(status, System.currentTimeMillis()))
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.i("AppLog", "Status atualizado com sucesso! (" + status + ")");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
+                            // TODO Catch Block
+                        }
+                    });
+        } else {
+            Log.i("AppLog", "user == null"); // TODO Excluir (Teste)
+        }
     }
 
     @Override
@@ -100,31 +136,6 @@ public class Hidroponia extends Application implements Application.ActivityLifec
 
     public static void setDados(Dados dados) {
         Hidroponia.dados = dados;
-    }
-
-    public static void setStatus(final String status) {
-        if(user != null) { // TODO Serve para quando a conta for excluida e ele voltar aki não bugar
-            Log.i("AppLog", "Atualizando status do usuário...");
-            FirebaseFirestore.getInstance().collection("/data")
-                    .document(user.getUserId()).collection("data")
-                    .document("status")
-                    .set(new Status(status, System.currentTimeMillis()))
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.i("AppLog", "Status atualizado com sucesso! (" + status + ")");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                            // TODO Catch Block
-                        }
-                    });
-        } else {
-            Log.i("AppLog", "user == null"); // TODO Excluir (Teste)
-        }
     }
 
     @Override

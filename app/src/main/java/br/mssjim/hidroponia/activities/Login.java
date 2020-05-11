@@ -57,7 +57,7 @@ public class Login extends Activity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         Log.i("AppLog", "Usuário autenticado com sucesso!");
-                        Intent intent = new Intent(Login.this, Inicio.class);
+                        Intent intent = new Intent(Login.this, Splash.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }

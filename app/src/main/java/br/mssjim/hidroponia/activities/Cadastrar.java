@@ -150,7 +150,7 @@ public class Cadastrar extends Activity {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
                                                         Log.i("AppLog", "Adicionado ao Firestore com sucesso!");
-                                                        Intent intent = new Intent(Cadastrar.this, Inicio.class);
+                                                        Intent intent = new Intent(Cadastrar.this, Splash.class);
                                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
                                                     }

@@ -103,4 +103,6 @@
 
     <string name="publishSuccess">Publicado com sucesso!</string>
     <string name="deletedUser">Usuário deletado</string>
+
+    <string name="reconnecting">Reconectando...</string>
 </resources>

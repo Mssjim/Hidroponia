@@ -65,125 +65,43 @@ public class Inicio extends Activity {
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
-
-        verifyLogin();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadCards();
+        verifyLogin();
     }
 
     public void verifyLogin() {
-        Log.i("AppLog", "Obtendo dados do Firestore...");
-        // Verifica se o usuário está logado
-        // TODO ProgressBar ou algo enquanto carrega os dados
-        String id = FirebaseAuth.getInstance().getUid();
-        if(id == null) {
-            Log.i("AppLog", "Nenhum usuário logado!");
-            Intent intent = new Intent(Inicio.this, Login.class);
+        user = Hidroponia.getUser();
+        roles = Hidroponia.getRoles();
+        dados = Hidroponia.getDados();
+
+        if(user == null || roles == null || dados == null) {
+            Intent intent = new Intent(Inicio.this, Splash.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            // System.exit(0); // TODO Apagar se nao bugar
             return;
         }
 
-        FirebaseFirestore.getInstance().collection("/users").document(id)
-            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot == null) {
-                        Log.i("AppLog", "Erro: Null Exception");
-                        // TODO Catch Block
-                        return;
-                    }
-                    Hidroponia.setUser(documentSnapshot.toObject(User.class));
-                    Hidroponia.setStatus("Online"); // TODO Refatorar status
-                    user = Hidroponia.getUser();
+        Hidroponia.setStatus("Online"); // TODO Refatorar status
 
-                    // TODO Remover esse e arrumar o 'getUser' da Application
-                    try {
-                        tvUsername.setText(user.getUsername());
-                        // TODO Melhorar sombra no campo de texto (talvez)
-                        tvUsername.setShadowLayer(10, 0, 0, Color.BLACK);
-                    } catch (Exception err) {
-                        Log.i("AppLog", "Erro: " + err.getLocalizedMessage());
-                        Intent intent = new Intent(Inicio.this, Login.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        // System.exit(0); // TODO Apagar se nao bugar
-                        // TODO Catch Block
-                        return;
-                    }
-                    // TODO Exibir uma imagem padrão ou animação de carregamento
-                    Picasso.get().load(user.getProfileImage()).into(ivImage);
+        tvUsername.setText(user.getUsername());
+        tvUsername.setShadowLayer(10, 0, 0, Color.BLACK);
+        Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
 
-                    FirebaseFirestore.getInstance().collection("/data").document(user.getUserId())
-                            .collection("data").document("roles").get()
-                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    roles = documentSnapshot.toObject(Roles.class);
+        tvRole.setText(roles.getRole());
+        tvRole.setShadowLayer(4, 0, 0, Color.BLACK);
 
-                                    if(roles == null) {
-                                        roles = new Roles();
-                                    }
+        // TODO Só exibir aqui 'btnComercio' (BtnPublish)
+        if (roles.isVisitor()) {
+            btnPublish.setText(getString(R.string.join));
+        } else {
+            btnPublish.setText(getString(R.string.publish));
+        }
 
-                                    Hidroponia.setRoles(roles);
-
-                                    tvRole.setText(roles.getRole());
-                                    // TODO Melhorar sombra no campo de texto (talvez)
-                                    tvRole.setShadowLayer(4, 0, 0, Color.BLACK);
-
-                                    // TODO Só exibir aqui 'btnComercio' (BtnPublish)
-                                    if(roles.isVisitor()) {
-                                        btnPublish.setText(getString(R.string.join));
-                                    } else {
-                                        btnPublish.setText(getString(R.string.publish));
-                                    }
-
-                                    FirebaseFirestore.getInstance().collection("/data")
-                                            .document(user.getUserId()).collection("data")
-                                            .document("dados").get()
-                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                    dados = documentSnapshot.toObject(Dados.class);
-
-                                                    if(dados == null) {
-                                                        dados = new Dados();
-                                                    }
-                                                    Hidroponia.setDados(dados);
-
-                                                    Log.i("AppLog", "Dados obtidos com sucesso!");
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                                                    // TODO Catch Block
-                                                }
-                                            });
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                                    // TODO Catch Block
-                                }
-                            });
-                    }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.i("AppLog", "Erro: " + e.getLocalizedMessage());
-                    // TODO Catch Block
-                }
-            });
+        loadCards();
     }
 
     public void loadCards() {
@@ -234,9 +152,8 @@ public class Inicio extends Activity {
                 startActivity(intent);
                 break;
             case R.id.logout:
-                Hidroponia.setStatus("Offline"); // TODO Refatorar status
-                FirebaseAuth.getInstance().signOut();
-                verifyLogin();
+                if(Hidroponia.logout())
+                    verifyLogin();
                 break;
         }
         return super.onOptionsItemSelected(item);
