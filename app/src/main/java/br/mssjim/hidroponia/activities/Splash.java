@@ -101,6 +101,10 @@ public class Splash extends Activity {
                             login();
                             return;
                         }
+                        User user = documentSnapshot.toObject(User.class);
+                        if (user == null) {
+                            login();
+                        }
                         Hidroponia.setUser(documentSnapshot.toObject(User.class));
 
                         FirebaseFirestore.getInstance().collection("/data").document(id)

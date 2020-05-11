@@ -52,7 +52,7 @@ public class Cadastrar extends Activity {
 
         btImage = findViewById(R.id.btImage);
         ivImage = findViewById(R.id.ivImage);
-        etUser=findViewById(R.id.etUser);
+        etUser = findViewById(R.id.etUser);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etPasswordConfirm = findViewById(R.id.etPasswordConfirm);
@@ -62,7 +62,10 @@ public class Cadastrar extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 0) {
+        if (requestCode == 0) {
+            if (data == null) {
+                return;
+            }
             imageUri = data.getData();
             Bitmap bitmap = null;
 
@@ -88,33 +91,31 @@ public class Cadastrar extends Activity {
         final String password = etPassword.getText().toString();
         final String passwordConfirm = etPasswordConfirm.getText().toString();
 
-        // TODO Solicitar uma imagem de perfil OU adicionar imagem padrão
-
-        if(username.isEmpty()) {
+        if (username.isEmpty()) {
             etUser.setError(getString(R.string.emptyUsername));
             return;
         }
-        if(email.isEmpty()) {
+        if (email.isEmpty()) {
             etEmail.setError(getString(R.string.emptyEmail));
             return;
         }
-        if(!email.contains("@")) {
+        if (!email.contains("@")) {
             etEmail.setError(getString(R.string.invalidEmail));
             return;
         }
-        if(password.isEmpty()) {
+        if (password.isEmpty()) {
             etPassword.setError(getString(R.string.emptyPassword));
             return;
         }
-        if(password.length() < 6) {
+        if (password.length() < 6) {
             etPassword.setError(getString(R.string.invalidPasswordLength));
             return;
         }
-        if(passwordConfirm.isEmpty()) {
+        if (passwordConfirm.isEmpty()) {
             etPasswordConfirm.setError(getString(R.string.unconfirmedPassword));
             return;
         }
-        if(!passwordConfirm.equals(password)) {
+        if (!passwordConfirm.equals(password)) {
             etPasswordConfirm.setError(getString(R.string.unmatchedPassword));
             return;
         }
@@ -124,25 +125,27 @@ public class Cadastrar extends Activity {
         Log.i("AppLog", "Cadastrando usuário...");
         // TODO Progress Dialog / Ou feedback de cadastramento
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull final Task<AuthResult> task) {
-                    if(task.isSuccessful()) {
-                        Log.i("AppLog", "Usuário cadastrado com Sucesso! User: " + etUser.getText() + " - Email: " + etEmail.getText());
-                        Log.i("AppLog", "Fazendo upload de imagem...");
-                        // TODO Animação durante upload
-                        final String id = FirebaseAuth.getInstance().getUid();
-                        final StorageReference ref = FirebaseStorage.getInstance().getReference("/profile-images/" + id);
-                        ref.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
-                                        User user = new User(id, username, email, Hash.code(password), uri.toString());
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull final Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.i("AppLog", "Usuário cadastrado com Sucesso! User: " + etUser.getText() + " - Email: " + etEmail.getText());
+                            Log.i("AppLog", "Fazendo upload de imagem...");
+                            // TODO Animação durante upload
+                            final String id = FirebaseAuth.getInstance().getUid();
+                            final StorageReference ref = FirebaseStorage.getInstance().getReference("/profile-images/" + id);
+                            if (imageUri != null) {
+                                ref.putFile(imageUri)
+                                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        Log.i("AppLog", "Upload de imagem concluído! Url pública: " + uri.toString());
+                                                        User user = new User(id, username, email, Hash.code(password), uri.toString());
 
-                                        Log.i("AppLog", "Adicionando usuário ao Firestore...");
+                                                        Log.i("AppLog", "Adicionando usuário ao Firestore...");
 
                                         FirebaseFirestore.getInstance().collection("users").document(id)
                                                 .set(user)
