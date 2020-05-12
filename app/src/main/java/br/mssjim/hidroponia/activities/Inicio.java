@@ -254,7 +254,7 @@ public class Inicio extends Activity {
                             }
                         }
                     });
-            tvTime.setText(new SimpleDateFormat("dd/mm - hh:mm").format(new Date(post.getTime())));
+            tvTime.setText(new SimpleDateFormat("d/M - k:mm").format(new Date(post.getTime())));
             tvText.setText(post.getText());
             if(post.getImage() != null)
                 Picasso.get().load(post.getImage()).placeholder(R.drawable.default_image).into(ivImage);
