@@ -30,24 +30,24 @@ public class Hidroponia extends Application implements Application.ActivityLifec
     }
 
     public static void logout() {
-        Hidroponia.setStatus("Offline"); // TODO Refatorar status
+        Hidroponia.setStatus(false);
         setUser(null);
         setRoles(null);
         setDados(null);
         FirebaseAuth.getInstance().signOut();
     }
 
-    public static void setStatus(final String status) {
+    public static void setStatus(final boolean online) {
         if(user != null) { // TODO Serve para quando a conta for excluida e ele voltar aki não bugar
             Log.i("AppLog", "Atualizando status do usuário...");
             FirebaseFirestore.getInstance().collection("/data")
                     .document(user.getUserId()).collection("data")
                     .document("status")
-                    .set(new Status(status, System.currentTimeMillis()))
+                    .set(new Status(online, System.currentTimeMillis()))
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.i("AppLog", "Status atualizado com sucesso! (" + status + ")");
+                            Log.i("AppLog", "Status atualizado com sucesso! (" + online + ")");
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -139,7 +139,7 @@ public class Hidroponia extends Application implements Application.ActivityLifec
         if (i == 0) {
             Log.e("AppLog", "Aplicação em primeiro plano");
             if(Hidroponia.getUser() != null) {
-                Hidroponia.setStatus("Online"); // TODO Refatorar status
+                Hidroponia.setStatus(true);
             }
         }
         i++;
@@ -159,7 +159,7 @@ public class Hidroponia extends Application implements Application.ActivityLifec
         if (i == 0) {
             Log.e("AppLog", "Aplicação em segundo plano");
             if(Hidroponia.getUser() != null) {
-                Hidroponia.setStatus("Offline"); // TODO Refatorar status
+                Hidroponia.setStatus(false);
             }
         }
     }

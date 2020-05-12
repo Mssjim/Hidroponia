@@ -82,7 +82,7 @@ public class Inicio extends Activity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else {
-            Hidroponia.setStatus("Online"); // TODO Refatorar status
+            Hidroponia.setStatus(true);
             fillViews();
             loadCards();
             updateDados();

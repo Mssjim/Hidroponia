@@ -1,21 +1,32 @@
 package br.mssjim.hidroponia;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Status {
-    // TODO boolean 'Online'
-    private String status;
+    private boolean online;
     private long lastSeen;
 
     public Status() {
     }
 
-    public Status(String status, long lastSeen) {
-        this.status = status;
+    public Status(boolean online, long lastSeen) {
+        this.online = online;
         this.lastSeen = lastSeen;
     }
 
     public String getStatus() {
-        // TODO Retornar Last Seen caso 'status == Offline'
-        return status;
+        if(online) {
+            return "Online"; // TODO Internacionalizar Texto
+        } else {
+            Date date = new Date(lastSeen);
+            String s = "Visto em " +
+                    new SimpleDateFormat("d/M").format(date) +
+                    " às " +
+                    new SimpleDateFormat("k:mm").format(date); // TODO Internacionalizar Texto
+
+            return s;
+        }
     }
 
     public long getLastSeen() {
