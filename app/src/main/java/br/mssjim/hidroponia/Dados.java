@@ -1,7 +1,6 @@
 package br.mssjim.hidroponia;
 
 public class Dados {
-    private String userId;
     private String name;
     private String date;
     private String cpf;
@@ -12,8 +11,7 @@ public class Dados {
     public Dados() {
     }
 
-    public Dados(String userId, String name, String date, String cpf, int phone, String address, String cep) {
-        this.userId = userId;
+    public Dados(String name, String date, String cpf, int phone, String address, String cep) {
         this.name = name;
         this.date = date;
         this.cpf = cpf;
@@ -21,18 +19,13 @@ public class Dados {
         this.address = address;
         this.cep = cep;
     }
-    public Dados(String userId, String name, String cpf, int phone, String address, String cep) {
-        this.userId = userId;
+    public Dados(String name, String cpf, int phone, String address, String cep) {
         this.name = name;
         this.date = "";
         this.cpf = cpf;
         this.phone = phone;
         this.address = address;
         this.cep = cep;
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     public String getName() {

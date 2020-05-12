@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -33,12 +32,11 @@ import br.mssjim.hidroponia.R;
 import br.mssjim.hidroponia.User;
 
 public class Publish extends Activity {
-    ImageView ivPublish;
-    EditText etPublish;
-    Button btSend;
+    private ImageView ivPublish;
+    private EditText etPublish;
 
-    String publishId;
-    Uri imageUri;
+    private String publishId;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(@Nullable @android.support.annotation.Nullable Bundle savedInstanceState) {
@@ -49,7 +47,6 @@ public class Publish extends Activity {
 
         ivPublish = findViewById(R.id.ivPublish);
         etPublish = findViewById(R.id.etPublish);
-        btSend = findViewById(R.id.btSend);
     }
 
     @Override
@@ -74,7 +71,7 @@ public class Publish extends Activity {
                 return;
             }
             imageUri = data.getData();
-            Bitmap bitmap = null;
+            Bitmap bitmap;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                 ivPublish.setImageDrawable(new BitmapDrawable(bitmap));
@@ -90,7 +87,7 @@ public class Publish extends Activity {
         startActivityForResult(intent, 0);
     }
 
-    public void enviar() {
+    private void enviar() {
         final User user = Hidroponia.getUser();
         final long time = System.currentTimeMillis();
         final String text = etPublish.getText().toString().trim();

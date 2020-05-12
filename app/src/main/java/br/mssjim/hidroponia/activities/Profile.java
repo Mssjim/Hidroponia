@@ -56,22 +56,7 @@ public class Profile extends Activity {
     private TextView tvUsername;
     private TextView tvRole;
 
-    private TextView tvEmail;
-
-    private TextView lDados;
-    private LinearLayout llDados;
-    private TextView tvNameField;
-    private TextView tvName;
-    private TextView tvDataField;
-    private TextView tvData;
-    private TextView tvCpfField;
-    private TextView tvCpf;
-    private TextView tvPhone;
-    private TextView tvAddress;
-    private TextView tvCep;
-
-    private AlertDialog.Builder alertDialog;
-    LinearLayout.LayoutParams lp;
+    private LinearLayout.LayoutParams lp;
 
     private int i, j, mensagens; // Variável utilizada para a contagem de documentos no método de exclusão de conta
 
@@ -92,22 +77,22 @@ public class Profile extends Activity {
         tvRole.setText(roles.getRole());
         Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
 
-        tvEmail = findViewById(R.id.tvEmail);
+        TextView tvEmail = findViewById(R.id.tvEmail);
 
         tvEmail.setText(user.getEmail());
 
         // Dados
-        lDados = findViewById(R.id.lDados);
-        llDados = findViewById(R.id.llDados);
-        tvNameField = findViewById(R.id.tvNameField);
-        tvName = findViewById(R.id.tvName);
-        tvDataField = findViewById(R.id.tvDataField);
-        tvData = findViewById(R.id.tvData);
-        tvCpfField = findViewById(R.id.tvCpfField);
-        tvCpf = findViewById(R.id.tvCpf);
-        tvPhone = findViewById(R.id.tvPhone);
-        tvAddress = findViewById(R.id.tvAddress);
-        tvCep = findViewById(R.id.tvCep);
+        TextView lDados = findViewById(R.id.lDados);
+        LinearLayout llDados = findViewById(R.id.llDados);
+        TextView tvNameField = findViewById(R.id.tvNameField);
+        TextView tvName = findViewById(R.id.tvName);
+        TextView tvDataField = findViewById(R.id.tvDataField);
+        TextView tvData = findViewById(R.id.tvData);
+        TextView tvCpfField = findViewById(R.id.tvCpfField);
+        TextView tvCpf = findViewById(R.id.tvCpf);
+        TextView tvPhone = findViewById(R.id.tvPhone);
+        TextView tvAddress = findViewById(R.id.tvAddress);
+        TextView tvCep = findViewById(R.id.tvCep);
 
         if (roles.isOrganic() || roles.isStore()) {
             tvDataField.setVisibility(View.GONE);
@@ -135,16 +120,15 @@ public class Profile extends Activity {
                 LinearLayout.LayoutParams.MATCH_PARENT);
     }
 
-    public void updateDados() {
+    private void updateDados() {
         user = Hidroponia.getUser();
         roles = Hidroponia.getRoles();
         dados = Hidroponia.getDados();
     }
 
-    public void createAlertDialog(String s, View view, View view2, DialogInterface.OnClickListener listener) {
+    private void createAlertDialog(String s, View view, View view2, DialogInterface.OnClickListener listener) {
         updateDados();
 
-        alertDialog = null;
         TextView title = new TextView(this);
         title.setText(s);
         title.setPadding(20, 30, 20, 30);
@@ -186,7 +170,7 @@ public class Profile extends Activity {
             }
             Log.i("AppLog", "Alterando Imagem do usuário");
             Uri imageUri = data.getData();
-            Bitmap bitmap = null;
+            Bitmap bitmap;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                 ivImage.setImageDrawable(new BitmapDrawable(bitmap));
@@ -237,7 +221,7 @@ public class Profile extends Activity {
         createAlertDialog(getString(R.string.changeUsername), input, null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                tvUsername.setText(input.getText().toString());
+                tvUsername.setText(input.getText().toString().trim());
                 Log.i("AppLog", "Alterando nome de usuário...");
                 FirebaseFirestore.getInstance().collection("users")
                         .document(user.getUserId()).update("username", input.getText().toString())
@@ -269,8 +253,8 @@ public class Profile extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("AppLog", "Alterando senha...");
-                final String password = inputPassword.getText().toString();
-                final String newPassword = inputNewPassword.getText().toString();
+                final String password = inputPassword.getText().toString().trim();
+                final String newPassword = inputNewPassword.getText().toString().trim();
                 if (!newPassword.isEmpty()) {
                     FirebaseAuth.getInstance().getCurrentUser()
                             .reauthenticate(EmailAuthProvider.getCredential(user.getEmail(), password))
@@ -341,7 +325,7 @@ public class Profile extends Activity {
         });
     }
 
-    public void deleteData() {
+    private void deleteData() {
         Log.i("AppLog", "1/5 - Apagando data...");
         FirebaseFirestore.getInstance().collection("data").document(user.getUserId())
                 .collection("data").get()
@@ -374,7 +358,7 @@ public class Profile extends Activity {
                 });
     }
 
-    public void deleteMessages() {
+    private void deleteMessages() {
         Log.i("AppLog", "2/5 - Apagando mensagens...");
         FirebaseFirestore.getInstance().collection("data").document(user.getUserId())
                 .collection("last-messages").get()
@@ -441,7 +425,7 @@ public class Profile extends Activity {
                 });
     }
 
-    public void deleteUser() {
+    private void deleteUser() {
         Log.i("AppLog", "3/5 - Apagando usuário...");
         FirebaseFirestore.getInstance().collection("users").document(user.getUserId())
                 .delete()
@@ -458,7 +442,7 @@ public class Profile extends Activity {
 
     }
 
-    public void deleteMedia() {
+    private void deleteMedia() {
         Log.i("AppLog", "4/5 - Apagando arquivos...");
         FirebaseStorage.getInstance().
                 getReference("/profile-images/" + user.getUserId()).delete()
@@ -474,7 +458,7 @@ public class Profile extends Activity {
                 });
     }
 
-    public void deleteAuth() {
+    private void deleteAuth() {
         Log.i("AppLog", "5/5 - Finalizando...");
         // TODO Autenticação não é excluída
         FirebaseAuth.getInstance().getCurrentUser().delete()

@@ -2,8 +2,6 @@ package br.mssjim.hidroponia.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -23,7 +21,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 import br.mssjim.hidroponia.Dados;
 import br.mssjim.hidroponia.Hidroponia;
@@ -36,7 +33,7 @@ public class Splash extends Activity {
     private TextView tvLogo;
     private ProgressBar pb;
 
-    Animation topAnimation, bottomAnimation, shadowAnimation;
+    private Animation topAnimation, bottomAnimation, shadowAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,19 +76,19 @@ public class Splash extends Activity {
         }
     }
 
-    public void login() {
+    private void login() {
         Intent intent = new Intent(Splash.this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
-    public void inicio() {
+    private void inicio() {
         Intent intent = new Intent(Splash.this, Inicio.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
-    public void getDados(final String id) {
+    private void getDados(final String id) {
         Log.i("AppLog", "Obtendo dados do Firestore...");
         FirebaseFirestore.getInstance().collection("/users").document(id).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -56,7 +56,7 @@ public class Update extends Activity {
         checkUpdates();
     }
 
-    public void checkUpdates() {
+    private void checkUpdates() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() { // Handler pra não travar tudo

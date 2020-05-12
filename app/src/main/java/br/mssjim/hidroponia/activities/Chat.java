@@ -38,7 +38,6 @@ import br.mssjim.hidroponia.User;
 public class Chat extends Activity {
 
     private GroupAdapter adapter;
-    private RecyclerView rv;
     private EditText etMsg;
     private User user;
     private User userSend;
@@ -59,7 +58,7 @@ public class Chat extends Activity {
         LinearLayoutManager layout = new LinearLayoutManager(this);
         layout.setStackFromEnd(true);
         adapter = new GroupAdapter();
-        rv = findViewById(R.id.rv);
+        RecyclerView rv = findViewById(R.id.rv);
         rv.setLayoutManager(layout);
         rv.setAdapter(adapter);
     }
@@ -82,25 +81,23 @@ public class Chat extends Activity {
                             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                                 List<DocumentChange> docs = queryDocumentSnapshots.getDocumentChanges();
 
-                                if(docs != null) {
-                                    for(DocumentChange doc : docs) {
-                                        // Lista apenas as alterações
-                                        if(doc.getType() == DocumentChange.Type.ADDED) {
-                                            Message message = doc.getDocument().toObject(Message.class);
-                                            Message previousMessage = new Message("", "", "", 0);
-                                            if(doc.getNewIndex() > 0) {
-                                                try {
-                                                    previousMessage = docs.get(doc.getNewIndex() - 1)
-                                                            .getDocument().toObject(Message.class);
-                                                } catch (Exception error) {
-                                                    if(lastMessage != null) {
-                                                        previousMessage = lastMessage;
-                                                    }
+                                for(DocumentChange doc : docs) {
+                                    // Lista apenas as alterações
+                                    if(doc.getType() == DocumentChange.Type.ADDED) {
+                                        Message message = doc.getDocument().toObject(Message.class);
+                                        Message previousMessage = new Message("", "", "", 0);
+                                        if(doc.getNewIndex() > 0) {
+                                            try {
+                                                previousMessage = docs.get(doc.getNewIndex() - 1)
+                                                        .getDocument().toObject(Message.class);
+                                            } catch (Exception error) {
+                                                if(lastMessage != null) {
+                                                    previousMessage = lastMessage;
                                                 }
                                             }
-                                            lastMessage = message;
-                                            adapter.add(new MessageItem(message, previousMessage));
                                         }
+                                        lastMessage = message;
+                                        adapter.add(new MessageItem(message, previousMessage));
                                     }
                                 }
                             }
@@ -116,7 +113,7 @@ public class Chat extends Activity {
             return;
         }
 
-        String text = etMsg.getText().toString();
+        String text = etMsg.getText().toString().trim();
         final String userSendId = userSend.getUserId();
         final String userId = user.getUserId();
         long time = System.currentTimeMillis();

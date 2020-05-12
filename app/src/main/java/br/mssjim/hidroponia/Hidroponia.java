@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Hidroponia extends Application implements Application.ActivityLifecycleCallbacks {
-    private static Context context;
     private static User user;
     private static Roles roles;
     private static Dados dados;
@@ -27,18 +26,15 @@ public class Hidroponia extends Application implements Application.ActivityLifec
     public void onCreate() {
         Log.e("AppLog", "Aplicação Iniciada");
         registerActivityLifecycleCallbacks(this); // TODO Talvez seja desnecessário
-        context = this;
         super.onCreate();
     }
 
-    public static boolean logout() {
+    public static void logout() {
         Hidroponia.setStatus("Offline"); // TODO Refatorar status
         setUser(null);
         setRoles(null);
         setDados(null);
         FirebaseAuth.getInstance().signOut();
-
-        return true;
     }
 
     public static void setStatus(final String status) {
@@ -105,10 +101,6 @@ public class Hidroponia extends Application implements Application.ActivityLifec
                 Log.e("AppLog", "onTrimMemory: Complete (80)");
                 break;
         }
-    }
-
-    public static Context getContext() {
-        return context;
     }
 
     public static User getUser() {

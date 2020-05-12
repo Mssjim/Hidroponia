@@ -40,7 +40,6 @@ import br.mssjim.hidroponia.User;
 public class Conversas extends Activity {
 
     private GroupAdapter adapter;
-    private RecyclerView rv;
 
     private ImageView ivImageGroup;
     private TextView tvMsgGroup;
@@ -68,7 +67,7 @@ public class Conversas extends Activity {
                 });
 
         adapter = new GroupAdapter();
-        rv = findViewById(R.id.rv);
+        RecyclerView rv = findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
@@ -107,15 +106,13 @@ public class Conversas extends Activity {
                             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                                 List<DocumentChange> docs = queryDocumentSnapshots.getDocumentChanges();
 
-                                if(docs != null) {
-                                    for(DocumentChange doc : docs) {
-                                        // Lista apenas as alterações
-                                        if(doc.getType() == DocumentChange.Type.ADDED) {
-                                            LastMessage lastMessage = doc.getDocument().toObject(LastMessage.class);
-                                            adapter.add(new LastMessageItem(lastMessage));
-                                            if(doc.getNewIndex() == docs.size() - 1)
-                                                Log.i("AppLog", "Todas as conversas foram carregadas!");
-                                        }
+                                for(DocumentChange doc : docs) {
+                                    // Lista apenas as alterações
+                                    if(doc.getType() == DocumentChange.Type.ADDED) {
+                                        LastMessage lastMessage = doc.getDocument().toObject(LastMessage.class);
+                                        adapter.add(new LastMessageItem(lastMessage));
+                                        if(doc.getNewIndex() == docs.size() - 1)
+                                            Log.i("AppLog", "Todas as conversas foram carregadas!");
                                     }
                                 }
                             }
@@ -144,7 +141,7 @@ public class Conversas extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class LastMessageItem extends Item<ViewHolder> {
+    private static class LastMessageItem extends Item<ViewHolder> {
 
         private final LastMessage lastMessage;
 

@@ -78,25 +78,23 @@ public class GroupChat extends Activity {
                             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                                 List<DocumentChange> docs = queryDocumentSnapshots.getDocumentChanges();
 
-                                if(docs != null) {
-                                    for(DocumentChange doc : docs) {
-                                        // Lista apenas as alterações
-                                        if(doc.getType() == DocumentChange.Type.ADDED) {
-                                            Message message = doc.getDocument().toObject(Message.class);
-                                            Message previousMessage = new Message("", "", "", 0);
-                                            if(doc.getNewIndex() > 0) {
-                                                try {
-                                                    previousMessage = docs.get(doc.getNewIndex() - 1)
-                                                            .getDocument().toObject(Message.class);
-                                                } catch (Exception error) {
-                                                    if(lastMessage != null) {
-                                                        previousMessage = lastMessage;
-                                                    }
+                                for(DocumentChange doc : docs) {
+                                    // Lista apenas as alterações
+                                    if(doc.getType() == DocumentChange.Type.ADDED) {
+                                        Message message = doc.getDocument().toObject(Message.class);
+                                        Message previousMessage = new Message("", "", "", 0);
+                                        if(doc.getNewIndex() > 0) {
+                                            try {
+                                                previousMessage = docs.get(doc.getNewIndex() - 1)
+                                                        .getDocument().toObject(Message.class);
+                                            } catch (Exception error) {
+                                                if(lastMessage != null) {
+                                                    previousMessage = lastMessage;
                                                 }
                                             }
-                                            lastMessage = message;
-                                            adapter.add(new MessageItem(message, previousMessage));
                                         }
+                                        lastMessage = message;
+                                        adapter.add(new MessageItem(message, previousMessage));
                                     }
                                 }
                             }

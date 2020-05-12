@@ -59,7 +59,6 @@
 
         <Button
             style="@style/Button"
-            android:id="@+id/btCadastrar"
             android:layout_marginLeft="80dp"
             android:layout_marginRight="80dp"
             android:text="@string/cadastrar"

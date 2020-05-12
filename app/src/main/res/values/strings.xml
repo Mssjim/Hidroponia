@@ -32,10 +32,10 @@
     <string name="logout">Sair</string>
 
     <string name="send">Enviar</string>
-    <string name="et_msg">Digite a mensagem...</string>
-    <string name="et_publish">Compartilhe algo...</string>
+    <string name="et_msg">Digite a mensagem…</string>
+    <string name="et_publish">Compartilhe algo…</string>
 
-    <string name="checkUpdates">Buscando atualizações...</string>
+    <string name="checkUpdates">Buscando atualizações…</string>
     <string name="newUpdate">Nova atualização encontrada!</string>
     <string name="currentVersion">Versão Atual:</string>
     <string name="lastVersion">Versão Disponível:</string>
@@ -68,7 +68,7 @@
     <string name="joinTitle4">Qual tipo de comércio?</string>
     <string name="joinTitle5">Informe seus dados</string>
     <string name="joinTitle6">Informe os dados do seu negócio</string>
-    <string name="choice">Escolha uma opção para prosseguir...</string>
+    <string name="choice">Escolha uma opção para prosseguir…</string>
     <!-- TODO Strings Perfil Join -->
     <string name="home">Blá blá blá Casa</string>
     <string name="business">Blá blá blá Hortifruti</string>
@@ -104,5 +104,5 @@
     <string name="publishSuccess">Publicado com sucesso!</string>
     <string name="deletedUser">Usuário deletado</string>
 
-    <string name="reconnecting">Reconectando...</string>
+    <string name="reconnecting">Reconectando…</string>
 </resources>

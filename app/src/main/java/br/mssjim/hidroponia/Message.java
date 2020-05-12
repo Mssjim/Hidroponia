@@ -20,31 +20,15 @@ public class Message {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public String getUserId() {
         return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getUserSendId() {
         return userSendId;
     }
 
-    public void setUserSendId(String userSendId) {
-        this.userSendId = userSendId;
-    }
-
     public long getTime() {
         return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
     }
 }

@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -74,7 +72,7 @@ public class Inicio extends Activity {
         verifyLogin();
     }
 
-    public void verifyLogin() {
+    private void verifyLogin() {
         user = Hidroponia.getUser();
         roles = Hidroponia.getRoles();
         dados = Hidroponia.getDados();
@@ -83,7 +81,6 @@ public class Inicio extends Activity {
             Intent intent = new Intent(Inicio.this, Splash.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            return;
         } else {
             Hidroponia.setStatus("Online"); // TODO Refatorar status
             fillViews();
@@ -92,7 +89,7 @@ public class Inicio extends Activity {
         }
     }
 
-    public void loadCards() {
+    private void loadCards() {
         Log.i("AppLog", "Carregando publicações...");
         // TODO alimentar recycle view
         FirebaseFirestore.getInstance().collection("/publish")
@@ -125,7 +122,7 @@ public class Inicio extends Activity {
                     }
                 });
     }
-    public void updateDados() {
+    private void updateDados() {
         Log.i("AppLog", "Atualizando dados...");
         final String id = user.getUserId();
         FirebaseFirestore.getInstance().collection("/users").document(id).get()
@@ -168,7 +165,7 @@ public class Inicio extends Activity {
                 });
     }
 
-    public void fillViews() {
+    private void fillViews() {
         tvUsername.setText(user.getUsername());
         tvUsername.setShadowLayer(10, 0, 0, Color.BLACK);
         Picasso.get().load(user.getProfileImage()).placeholder(R.drawable.default_profile).into(ivImage);
@@ -198,8 +195,8 @@ public class Inicio extends Activity {
                 startActivity(intent);
                 break;
             case R.id.logout:
-                if(Hidroponia.logout())
-                    verifyLogin();
+                Hidroponia.logout();
+                verifyLogin();
                 break;
         }
         return super.onOptionsItemSelected(item);

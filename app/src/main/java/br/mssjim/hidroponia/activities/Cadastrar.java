@@ -41,7 +41,6 @@ public class Cadastrar extends Activity {
     private EditText etEmail;
     private EditText etPassword;
     private EditText etPasswordConfirm;
-    private Button btCadastrar;
 
     private Uri imageUri;
 
@@ -56,7 +55,6 @@ public class Cadastrar extends Activity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etPasswordConfirm = findViewById(R.id.etPasswordConfirm);
-        btCadastrar = findViewById(R.id.btCadastrar);
     }
 
     @Override
@@ -67,7 +65,7 @@ public class Cadastrar extends Activity {
                 return;
             }
             imageUri = data.getData();
-            Bitmap bitmap = null;
+            Bitmap bitmap;
 
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
@@ -86,10 +84,10 @@ public class Cadastrar extends Activity {
     }
 
     public void cadastrar(final View v) {
-        final String username = etUser.getText().toString();
-        final String email = etEmail.getText().toString();
-        final String password = etPassword.getText().toString();
-        final String passwordConfirm = etPasswordConfirm.getText().toString();
+        final String username = etUser.getText().toString().trim();
+        final String email = etEmail.getText().toString().trim();
+        final String password = etPassword.getText().toString().trim();
+        final String passwordConfirm = etPasswordConfirm.getText().toString().trim();
 
         if (username.isEmpty()) {
             etUser.setError(getString(R.string.emptyUsername));

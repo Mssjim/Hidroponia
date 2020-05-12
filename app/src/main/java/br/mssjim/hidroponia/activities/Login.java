@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,8 +21,6 @@ public class Login extends Activity {
 
     private EditText etEmail;
     private EditText etPassword;
-    private Button btLogin;
-    private TextView tvCadastrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +29,6 @@ public class Login extends Activity {
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        btLogin = findViewById(R.id.btLogin);
-        tvCadastrar = findViewById(R.id.tvCadastrar);
     }
 
     public void login(final View v) {

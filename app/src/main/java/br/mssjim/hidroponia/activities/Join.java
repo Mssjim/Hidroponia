@@ -26,7 +26,6 @@ public class Join extends Activity {
     // TODO Perfil para pessoas que só buscam comprar alimentos (talvez)
 
     private boolean home;
-    private boolean business;
     private boolean farm;
     private boolean sale;
     private boolean organic;
@@ -65,7 +64,6 @@ public class Join extends Activity {
 
     public void home(View view) {
         home = true;
-        business = false;
 
         ImageView ivHome = findViewById(R.id.ivHome);
         ImageView ivBusiness = findViewById(R.id.ivBusiness);
@@ -79,7 +77,6 @@ public class Join extends Activity {
     }
     public void business(View view) {
         home = false;
-        business = true;
 
         ImageView ivHome = findViewById(R.id.ivHome);
         ImageView ivBusiness = findViewById(R.id.ivBusiness);
@@ -175,7 +172,6 @@ public class Join extends Activity {
 
         // TODO Evitar erros de Parse
         Dados dados = new Dados(
-                Hidroponia.getUser().getUserId(),
                 etName.getText().toString(),
                 etNasc.getText().toString(),
                 etCpf.getText().toString(),
@@ -217,11 +213,11 @@ public class Join extends Activity {
         // TODO Evitar erros de Parse
         Dados dados = new Dados(
                 Hidroponia.getUser().getUserId(),
-                etRazao.getText().toString(),
-                etCnpj.getText().toString(),
-                Integer.parseInt(etPhone.getText().toString()),
-                etAddress.getText().toString(),
-                etCep.getText().toString()
+                etRazao.getText().toString().trim(),
+                etCnpj.getText().toString().trim(),
+                Integer.parseInt(etPhone.getText().toString().trim()),
+                etAddress.getText().toString().trim(),
+                etCep.getText().toString().trim()
         );
 
         Log.i("AppLog", "Adicionando dados ao Firestore...");
@@ -245,7 +241,7 @@ public class Join extends Activity {
         updateRoles();
     }
 
-    public void updateRoles() {
+    private void updateRoles() {
         Log.i("AppLog", "Adicionando dados ao Firestore...");
         FirebaseFirestore.getInstance().collection("/data")
                 .document(Hidroponia.getUser().getUserId()).collection("data")

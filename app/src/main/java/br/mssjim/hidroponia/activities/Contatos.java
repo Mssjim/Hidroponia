@@ -33,11 +33,6 @@ import br.mssjim.hidroponia.Status;
 import br.mssjim.hidroponia.User;
 
 public class Contatos extends Activity {
-
-    private ImageView ivImage;
-    private TextView tvUsername;
-    private TextView tvStatus;
-
     private GroupAdapter adapter;
 
     @Override
@@ -46,10 +41,6 @@ public class Contatos extends Activity {
         setContentView(R.layout.act_contatos);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        ivImage = findViewById(R.id.ivImage);
-        tvUsername = findViewById(R.id.tvUsername);
-        tvStatus = findViewById(R.id.tvStatus);
 
         adapter = new GroupAdapter();
         RecyclerView rv = findViewById(R.id.rv);
